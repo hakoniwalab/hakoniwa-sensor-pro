@@ -1,0 +1,102 @@
+name: release-tests
+
+# The released binary sets, tested as a user would (docs/running-tests.md): download the archive,
+# check its SHA-256, and run the tests against it on each supported platform. The plugin tests need a
+# Hakoniwa core install and are not run here; the rest of the stages are.
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Release version (without v)"
+        required: true
+        default: "0.1.0"
+  schedule:
+    - cron: "0 3 * * 1"
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-24.04
+            platform: linux-x64
+          - os: macos-14
+            platform: macos-arm64
+    runs-on: ${{ matrix.os }}
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: hakoniwa-sensor-pro
+
+      - name: Version
+        run: |
+          V="${{ github.event.release.tag_name || inputs.version }}"
+          if [ -z "$V" ]; then V=$(gh release view -R "${{ github.repository }}" --json tagName -q .tagName); fi
+          echo "VERSION=${V#v}" >> "$GITHUB_ENV"
+
+      - name: Tools (Ubuntu)
+        if: runner.os == 'Linux'
+        run: sudo apt-get update -q && sudo apt-get install -y -q cmake g++ libgtest-dev libglfw3-dev libgl-dev xvfb
+
+      - name: Tools (macOS)
+        if: runner.os == 'macOS'
+        run: brew install googletest glfw
+
+      - name: Public repositories at the pinned revisions
+        run: |
+          rev() { python3 -c "import json,sys;print(json.load(open('hakoniwa-sensor-pro/config/sources.json'))['sources'][sys.argv[1]]['revision'])" "$1"; }
+          git clone -q https://github.com/hakoniwalab/hakoniwa-sensor-adapter.git
+          git clone -q https://github.com/toppers/hakoniwa-drone-core.git
+          git -C hakoniwa-sensor-adapter checkout -q "$(rev sensor-adapter)"
+          git -C hakoniwa-drone-core checkout -q "$(rev drone-core)"
+
+      - name: Binary set
+        run: |
+          NAME=hakoniwa-sensor-pro-$VERSION-${{ matrix.platform }}
+          gh release download "v$VERSION" -R "${{ github.repository }}" -p "$NAME.zip" -p "$NAME.zip.sha256"
+          if [ "$RUNNER_OS" = Linux ]; then sha256sum -c $NAME.zip.sha256; else shasum -a 256 -c $NAME.zip.sha256; fi
+          unzip -q $NAME.zip
+          echo "DIST=$PWD/$NAME" >> "$GITHUB_ENV"
+
+      - name: MuJoCo (Ubuntu)
+        if: runner.os == 'Linux'
+        run: |
+          MJ=$(cat hakoniwa-sensor-pro/MUJOCO_VERSION.txt)
+          curl -sSL -O https://github.com/google-deepmind/mujoco/releases/download/$MJ/mujoco-$MJ-linux-x86_64.tar.gz
+          tar -xzf mujoco-$MJ-linux-x86_64.tar.gz
+          echo "MUJOCO=$PWD/mujoco-$MJ" >> "$GITHUB_ENV"
+
+      - name: MuJoCo (macOS)
+        if: runner.os == 'macOS'
+        run: |
+          MJ=$(cat hakoniwa-sensor-pro/MUJOCO_VERSION.txt)
+          curl -sSL -O https://github.com/google-deepmind/mujoco/releases/download/$MJ/mujoco-$MJ-macos-universal2.dmg
+          hdiutil attach mujoco-$MJ-macos-universal2.dmg -mountpoint /Volumes/MuJoCo
+          mkdir -p mujoco-$MJ/include/mujoco mujoco-$MJ/lib
+          cp -Rp /Volumes/MuJoCo/MuJoCo.app/Contents/Frameworks/MuJoCo.framework mujoco-$MJ/
+          hdiutil detach /Volumes/MuJoCo
+          cp -R mujoco-$MJ/MuJoCo.framework/Headers/* mujoco-$MJ/include/mujoco/
+          cp mujoco-$MJ/MuJoCo.framework/Versions/Current/libmujoco.$MJ.dylib mujoco-$MJ/lib/
+          echo "MUJOCO=$PWD/mujoco-$MJ" >> "$GITHUB_ENV"
+
+      - name: Tests
+        working-directory: hakoniwa-sensor-pro
+        run: |
+          if [ "$RUNNER_OS" = Linux ]; then RUN="xvfb-run -a"; else RUN=""; fi
+          $RUN python3 tools/run-tests.py --dist "$DIST" --mujoco-root "$MUJOCO"
+
+      - name: Report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: report-${{ matrix.platform }}
+          path: hakoniwa-sensor-pro/build/tests-${{ matrix.platform }}/report/
+          if-no-files-found: ignore

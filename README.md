@@ -1,5 +1,7 @@
 # hakoniwa-sensor-pro
 
+[![consistency](https://github.com/hakoniwalab/hakoniwa-sensor-pro/actions/workflows/consistency.yml/badge.svg)](https://github.com/hakoniwalab/hakoniwa-sensor-pro/actions/workflows/consistency.yml) [![release-tests](https://github.com/hakoniwalab/hakoniwa-sensor-pro/actions/workflows/release-tests.yml/badge.svg)](https://github.com/hakoniwalab/hakoniwa-sensor-pro/actions/workflows/release-tests.yml)
+
 Hakoniwa Lab's sensor implementation for simulation, distributed as binaries, with the tests that check it against its specification.
 
 ## What this is
@@ -173,6 +175,7 @@ Passed: tested requirements whose tests all passed on every platform. The reason
 | `tools/sync.py` | Copies the tests, fixtures and headers listed in [config/sync.json](config/sync.json) from the private sources at the revisions in [config/sources.json](config/sources.json). `--check` reports files that differ |
 | `tools/build-binaries.py` | Builds the binary set into `dist/<platform>/` from checkouts at those revisions |
 | `tools/package.py` | Makes the release archive `dist/hakoniwa-sensor-pro-<version>-<platform>.zip` and its `.sha256` |
+| `tools/regenerate.py` | Rewrites the test status and the traceability from `results/*.json` without running tests; `--check` (run by CI) reports a difference |
 | `tools/run-tests.py --update-repository` | Builds and runs the tests against a binary set and writes the results into `results/`, [docs/traceability.md](docs/traceability.md) and this README |
 
 To move to new revisions: change [config/sources.json](config/sources.json), then run `sync.py`, `build-binaries.py`, `run-tests.py --update-repository` and `package.py`.
