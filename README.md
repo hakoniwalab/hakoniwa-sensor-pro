@@ -83,10 +83,10 @@ The result of the last run on each platform, by sensor and stage (written by `to
 
 ### macos-arm64
 
-- Run: 2026-11-15 10:59 UTC — 218 of 218 tests passed
-- Binary set built 2026-11-15T10:59:15Z from implementation `1482e95b`, IMU and GNSS models `2732fc53`, interface (hakoniwa-sensor-adapter) `433de4fe`
+- Run: 2026-11-15 11:03 UTC — 218 of 218 tests passed
+- Binary set built 2026-11-15T11:03:09Z from implementation `6319a852`, IMU and GNSS models `2732fc53`, interface (hakoniwa-sensor-adapter) `433de4fe`
 - Toolchain: Apple clang version 21.0.0 (clang-2100.4.1.1)
-- Binary set: MANIFEST.json sha256 `2b677a20301ec948e6040c0a884923a9684b07b65288da072c12f5d12c13490a` (every file checked against it before the run)
+- Binary set: MANIFEST.json sha256 `1a1ad48ec3171ae92c72e83883675261f8a8626251aa31d7b8e6cb48642eaffa` (every file checked against it before the run)
 
 | Sensor | Sensor model | On a MuJoCo model |
 |---|---|---|

@@ -1,16 +1,16 @@
 {
   "platform": "macos-arm64",
-  "run": "2026-11-15 10:59 UTC",
+  "run": "2026-11-15 11:03 UTC",
   "total": 218,
   "passed": 218,
   "failed": [],
   "ctest_exit": 0,
   "binaries": {
-    "built": "2026-11-15T10:59:15Z",
+    "built": "2026-11-15T11:03:09Z",
     "sources": {
       "sensors-pro": {
         "repository": "hakoniwalab/hakoniwa-mujoco-sensors-pro",
-        "revision": "1482e95bb7b19e023c0dbbc54f6a558312730ea0"
+        "revision": "6319a85204edcf57b37d8dcfcf1f9f31016a4378"
       },
       "drone-pro": {
         "repository": "hakoniwalab/hakoniwa-drone-pro",
@@ -28,7 +28,7 @@
       "mujoco_library": "libmujoco.3.16.0.dylib",
       "mujoco_version": "3.16.0"
     },
-    "manifest_sha256": "2b677a20301ec948e6040c0a884923a9684b07b65288da072c12f5d12c13490a"
+    "manifest_sha256": "1a1ad48ec3171ae92c72e83883675261f8a8626251aa31d7b8e6cb48642eaffa"
   },
   "by_sensor": {
     "Rangefinder": {
