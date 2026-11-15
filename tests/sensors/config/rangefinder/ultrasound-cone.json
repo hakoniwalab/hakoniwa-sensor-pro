@@ -1,0 +1,11 @@
+{
+  "type": "rangefinder",
+  "update_rate": 10,
+  "radiation_type": "ultrasound",
+  "range": { "min": 0.2, "max": 4.0, "resolution": 0.0 },
+  "cone": { "horizontal": 0.52359878, "vertical": 0.52359878, "rays": 25 },
+  "accuracy": [
+    { "range": { "min": 0.2, "max": 4.0 }, "stddev": 0.01 }
+  ],
+  "no_return": "limit"
+}

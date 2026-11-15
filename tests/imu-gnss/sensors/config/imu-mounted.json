@@ -1,0 +1,9 @@
+{
+  "components": {
+    "sensors": {
+      "imu": {"mount": {"positionM": [0.05, 0, 0], "orientationDeg": {"roll": 0, "pitch": 0, "yaw": 0}}},
+      "gyro": {},
+      "acc": {}
+    }
+  }
+}

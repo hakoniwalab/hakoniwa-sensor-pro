@@ -1,0 +1,35 @@
+{
+  "components": {
+    "sensors": {
+      "imu": {"mount": {"positionM": [0, 0, 0], "orientationDeg": {"roll": 0, "pitch": 0, "yaw": 0}}},
+      "mag": {
+        "updatePeriodMsec": 20,
+        "delayMsec": 3,
+        "noise": [30, 30, 40],
+        "softIron": {"diagonal": [1.02, 0.98, 1.01], "offDiagonal": [0.01, -0.02, 0.005]},
+        "hardIronNT": [3000, -1500, 800],
+        "drift": {"mode": "gauss-markov", "stddevNT": 100, "correlationTimeSec": 1.0},
+        "resolutionNT": 15,
+        "range": {"fullScaleGauss": 4}
+      },
+      "baro": {
+        "updatePeriodMsec": 20,
+        "delayMsec": 60,
+        "noise": 0.1,
+        "zeroOffset": {"randomStdM": 4},
+        "drift": {"mode": "gauss-markov", "stddevM": 0.3, "correlationTimeSec": 30},
+        "resolutionPa": 0.5,
+        "range": {"minHPa": 300, "maxHPa": 1100}
+      },
+      "gps": {
+        "updatePeriodMsec": 100,
+        "delayMsec": 100,
+        "positionNoise": {"horizontalM": 0.3, "verticalM": 0.5},
+        "velocityNoise": {"horizontalMps": 0.1, "verticalMps": 0.2},
+        "drift": {"mode": "gauss-markov", "horizontalM": 0.5, "verticalM": 0.8, "correlationTimeSec": 60},
+        "accuracy": {"horizontalM": 1.5, "verticalM": 3.0, "speedMps": 0.3},
+        "satellitesVisible": 12
+      }
+    }
+  }
+}

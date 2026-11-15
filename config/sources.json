@@ -1,0 +1,31 @@
+{
+  "description": "The revisions the binaries are built from and the tests are synchronised from. tools/sync.py copies the files listed in config/sync.json from these revisions; tools/build-binaries.py builds the binaries from checkouts at these revisions. specification_revision: the revision of hakoniwa-sensor-adapter's docs/spec read by tools/traceability.py.",
+  "sources": {
+    "sensors-pro": {
+      "repository": "hakoniwalab/hakoniwa-mujoco-sensors-pro",
+      "visibility": "private",
+      "checkout": "../hakoniwa-mujoco-sensors-pro",
+      "revision": "1482e95bb7b19e023c0dbbc54f6a558312730ea0"
+    },
+    "drone-pro": {
+      "repository": "hakoniwalab/hakoniwa-drone-pro",
+      "visibility": "private",
+      "checkout": "../hakoniwa-drone-pro",
+      "revision": "2732fc53f2a2027905f7ca49c21b25e36fe9cc7c"
+    },
+    "sensor-adapter": {
+      "repository": "hakoniwalab/hakoniwa-sensor-adapter",
+      "visibility": "public",
+      "checkout": "../hakoniwa-sensor-adapter",
+      "revision": "433de4feda852317f1f1a0d6ea47d3e0b0af7ce4",
+      "specification_revision": "0b739187af1a6504af5aa7dc3e567d0167836d8a"
+    },
+    "drone-core": {
+      "repository": "toppers/hakoniwa-drone-core",
+      "visibility": "public",
+      "checkout": "../hakoniwa-drone-core",
+      "revision": "221afa40809c9edb476f88c71383a43c134d4b9d",
+      "use": "test design of the drone sensors (requirement -> test ID), read by tools/traceability.py"
+    }
+  }
+}
