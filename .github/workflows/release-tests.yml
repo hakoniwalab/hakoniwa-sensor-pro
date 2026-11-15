@@ -2,7 +2,8 @@ name: release-tests
 
 # The released binary sets, tested as a user would (docs/running-tests.md): download the archive,
 # check its SHA-256, and run the tests against it on each supported platform. The plugin tests need a
-# Hakoniwa core install and are not run here; the rest of the stages are.
+# Hakoniwa core install and are not run here; the rest of the stages are. On macOS the renderer tests
+# are left out (no display on the runners).
 on:
   release:
     types: [published]
@@ -26,7 +27,7 @@ jobs:
         include:
           - os: ubuntu-24.04
             platform: linux-x64
-          - os: macos-14
+          - os: macos-15
             platform: macos-arm64
     runs-on: ${{ matrix.os }}
     env:
@@ -90,8 +91,14 @@ jobs:
       - name: Tests
         working-directory: hakoniwa-sensor-pro
         run: |
-          if [ "$RUNNER_OS" = Linux ]; then RUN="xvfb-run -a"; else RUN=""; fi
-          $RUN python3 tools/run-tests.py --dist "$DIST" --mujoco-root "$MUJOCO"
+          if [ "$RUNNER_OS" = Linux ]; then
+            xvfb-run -a python3 tools/run-tests.py --dist "$DIST" --mujoco-root "$MUJOCO"
+          else
+            # The macOS runners have no display for an OpenGL context: the renderer tests (image renderer,
+            # rendered depth, RGB camera on MuJoCo) are left out here; they run on Linux under xvfb.
+            python3 tools/run-tests.py --dist "$DIST" --mujoco-root "$MUJOCO" \
+              --exclude 'MujocoImageRenderer|T_DEP_I1_020_MujocoRayAgainstRender|^mujoco_rgb_camera$'
+          fi
 
       - name: Report
         if: always()
