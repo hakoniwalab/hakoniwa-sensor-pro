@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """Make the release archive of a binary set: hakoniwa-sensor-pro-<version>-<platform>.zip and its .sha256.
 
-The archive holds one top directory with lib/, include/, MANIFEST.json and LICENSE.
+The archive holds one top directory with lib/, include/, MANIFEST.json and the license files
+(LICENSE, LICENSE.md, LICENSE-ja.md, THIRD_PARTY_NOTICES.md).
 
     python3 tools/package.py --version 0.1.0          # dist/<this platform>
     python3 tools/package.py --version 0.1.0 --dist dist/macos-arm64
@@ -21,11 +22,13 @@ platform_name = import_module("build-binaries").platform_name
 verify_manifest = import_module("run-tests").verify_manifest
 
 
+LICENSE_FILES = ["LICENSE", "LICENSE.md", "LICENSE-ja.md", "THIRD_PARTY_NOTICES.md"]
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--version", required=True)
     ap.add_argument("--dist", default=str(ROOT / "dist" / platform_name()))
-    ap.add_argument("--allow-no-license", action="store_true", help="for trying the packaging before LICENSE exists")
     args = ap.parse_args()
 
     dist = Path(args.dist).resolve()
@@ -44,17 +47,18 @@ def main():
         sys.exit(f"{record_path.name}: {record['passed']} of {record['total']} passed, ctest exit "
                  f"{record.get('ctest_exit')}; only a fully passed binary set is packaged")
     print(f"binary set matches MANIFEST.json and its test record: {record['passed']} of {record['total']} passed")
-    license_file = ROOT / "LICENSE"
-    if not license_file.exists() and not args.allow_no_license:
-        sys.exit("LICENSE is missing")
+    license_files = [ROOT / n for n in LICENSE_FILES]
+    missing = [f.name for f in license_files if not f.exists()]
+    if missing:
+        sys.exit(f"license files missing: {missing}")
     name = f"hakoniwa-sensor-pro-{args.version}-{manifest['platform']}"
     out = ROOT / "dist" / f"{name}.zip"
     with zipfile.ZipFile(out, "w", zipfile.ZIP_DEFLATED) as z:
         for p in sorted(dist.rglob("*")):
             if p.is_file():
                 z.write(p, f"{name}/{p.relative_to(dist)}")
-        if license_file.exists():
-            z.write(license_file, f"{name}/LICENSE")
+        for f in license_files:
+            z.write(f, f"{name}/{f.name}")
     digest = hashlib.sha256(out.read_bytes()).hexdigest()
     (ROOT / "dist" / f"{name}.zip.sha256").write_text(f"{digest}  {out.name}\n")
     print(f"{out} ({out.stat().st_size} bytes)\nsha256 {digest}")

@@ -1,12 +1,12 @@
 {
   "platform": "macos-arm64",
-  "run": "2026-11-15 11:14 UTC",
-  "total": 224,
-  "passed": 224,
+  "run": "2026-11-15 11:19 UTC",
+  "total": 225,
+  "passed": 225,
   "failed": [],
   "ctest_exit": 0,
   "binaries": {
-    "built": "2026-11-15T11:03:09Z",
+    "built": "2026-11-15T11:18:48Z",
     "sources": {
       "sensors-pro": {
         "repository": "hakoniwalab/hakoniwa-mujoco-sensors-pro",
@@ -28,7 +28,7 @@
       "mujoco_library": "libmujoco.3.16.0.dylib",
       "mujoco_version": "3.16.0"
     },
-    "manifest_sha256": "1a1ad48ec3171ae92c72e83883675261f8a8626251aa31d7b8e6cb48642eaffa"
+    "manifest_sha256": "229c6d59699b1da04a24ade719c7dc1b240a10aad558741af801fba1dba796cd"
   },
   "by_sensor": {
     "Rangefinder": {
@@ -93,8 +93,8 @@
     },
     "Common": {
       "model": {
-        "total": 38,
-        "passed": 38
+        "total": 39,
+        "passed": 39
       },
       "mujoco": {
         "total": 16,
@@ -345,6 +345,7 @@
     "PluginSpec.T_PLG_I1_050_RegisterServicesWithoutHakoniwaFailsCleanly": true,
     "PluginSpec.T_PLG_I1_060_MountedRangefinderStepsInKnownGeometry": true,
     "no_physics_engine": true,
+    "no_build_paths": true,
     "rangefinder_adapter": true,
     "lidar_adapter": true,
     "depth_camera_adapter": true,

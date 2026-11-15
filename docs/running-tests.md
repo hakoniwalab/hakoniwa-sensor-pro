@@ -60,6 +60,8 @@ cp mujoco-$MJ/MuJoCo.framework/Versions/Current/libmujoco.$MJ.dylib mujoco-$MJ/l
 
 Without this step, leave out `--mujoco-root` below: only the sensor-model tests run.
 
+The tests of the external sensor plugin also need the Hakoniwa core libraries the plugin links to (`libassets`), from a Hakoniwa core install; add `--hakoniwa-prefix <install prefix>` to the run below. The plugin carries no library search path of its own: the test, like a host, supplies the Hakoniwa, MuJoCo and GLFW library directories. Without the option the plugin tests are not built.
+
 ## 5. Run
 
 ```bash

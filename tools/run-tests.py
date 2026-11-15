@@ -47,7 +47,7 @@ SUITE = {
     "MujocoDepthCamera": ("Depth camera", "mujoco"), "MujocoDepthRender": ("Depth camera", "mujoco"),
     "mujoco_rangefinder": ("Rangefinder", "mujoco"), "mujoco_lidar": ("2D/3D LiDAR", "mujoco"),
     "mujoco_depth_camera": ("Depth camera", "mujoco"), "mujoco_rgb_camera": ("RGB camera, Depth camera", "mujoco"),
-    "no_physics_engine": ("Common", "model"),
+    "no_physics_engine": ("Common", "model"), "no_build_paths": ("Common", "model"),
     "PluginJoint": ("Joint", "plugin"), "PluginForceTorque": ("Force-torque", "plugin"),
     "PluginSpec": ("Common", "plugin"),
     "PublicForceTorqueSpec": ("Force-torque", "model"), "PublicJointSpec": ("Joint", "model"),
@@ -100,7 +100,7 @@ def verify_manifest(dist):
     """Every file of the binary set matches MANIFEST.json, and no file is missing or extra."""
     manifest = json.loads((dist / "MANIFEST.json").read_text())
     listed = manifest["files"]
-    present = {str(p.relative_to(dist)) for p in dist.rglob("*") if p.is_file()} - {"MANIFEST.json", "LICENSE"}
+    present = {str(p.relative_to(dist)) for p in dist.rglob("*") if p.is_file()} - {"MANIFEST.json", "LICENSE", "LICENSE.md", "LICENSE-ja.md", "THIRD_PARTY_NOTICES.md"}
     errors = [f"missing: {f}" for f in sorted(set(listed) - present)]
     errors += [f"not in MANIFEST.json: {f}" for f in sorted(present - set(listed))]
     for f in sorted(set(listed) & present):
@@ -148,11 +148,15 @@ def main():
     ap.add_argument("--dist", default=str(ROOT / "dist" / platform_name()))
     ap.add_argument("--mujoco-root", help="MuJoCo release directory: adds the tests on a MuJoCo model")
     ap.add_argument("--mujoco-library", help="MuJoCo library file")
+    ap.add_argument("--hakoniwa-prefix", help="Hakoniwa core install prefix: adds the external plugin tests "
+                    "(with --mujoco-root)")
     ap.add_argument("--update-repository", action="store_true",
                     help="maintainers: write results/<platform>.json, docs/traceability.md and the README status "
                          "(default: write them under build/tests-<platform>/report/ only)")
     args = ap.parse_args()
-    extra = ["-DHAKO_MUJOCO_ROOT=", "-DHAKO_MUJOCO_LIBRARY="]  # cleared unless given, so an old cache cannot linger
+    # Cleared unless given, so an old cache cannot linger.
+    extra = ["-DHAKO_MUJOCO_ROOT=", "-DHAKO_MUJOCO_LIBRARY=",
+             f"-DHAKONIWA_INSTALL_PREFIX={Path(args.hakoniwa_prefix).resolve() if args.hakoniwa_prefix else ''}"]
     if args.mujoco_root:
         version = (ROOT / "MUJOCO_VERSION.txt").read_text().strip()
         lib = args.mujoco_library or next(str(p) for p in sorted(Path(args.mujoco_root, "lib").glob("libmujoco*"))

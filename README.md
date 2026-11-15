@@ -38,7 +38,7 @@ Each [release](https://github.com/hakoniwalab/hakoniwa-sensor-pro/releases) has 
 | `lib/` | `libhakoniwa_mujoco_sensors_adapters.a` (joint, force-torque, LiDAR, rangefinder, depth and RGB cameras; the `hakoniwa` implementation entry), `libhakoniwa_imu_gnss_sensor_adapters.a` and `libhakoniwa_imu_gnss_sensor_models.a` (IMU, magnetometer, barometer, GNSS), the MuJoCo parts (`libhakoniwa_mujoco_sensors_mujoco.a`, the ray caster; `libhakoniwa_mujoco_sensors_renderer.a`, the image renderer) and the external sensor plugin (`hakoniwa_mujoco_sensors_plugin.so`) |
 | `include/` | the public headers of the implementation |
 | `MANIFEST.json` | the source revisions, the toolchain and the SHA-256 of every file |
-| `LICENSE` | the license of the binaries |
+| `LICENSE`, `LICENSE.md`, `LICENSE-ja.md`, `THIRD_PARTY_NOTICES.md` | the license of the binaries and the third-party notices |
 
 ### Supported environments
 
@@ -51,12 +51,13 @@ The libraries are C++17. A host also needs, for the MuJoCo parts, the MuJoCo ver
 
 Built with the MuJoCo version in [MUJOCO_VERSION.txt](MUJOCO_VERSION.txt) (the implementation's own, synchronised with the tests). The MuJoCo parts (`libhakoniwa_mujoco_sensors_mujoco.a`, `libhakoniwa_mujoco_sensors_renderer.a`, the plugin) must be used with that version; the other libraries do not use MuJoCo. Each archive's `MANIFEST.json` names the MuJoCo library it was built with.
 
-A host links the libraries and registers the implementation through the interface's implementation entry (`hakoniwa-sensor-adapter`'s `sensor_adapter_implementation.hpp`). For hakoniwa-robot-runtime, see its sensor documentation.
+The plugin carries no library search path: a host that loads it supplies the Hakoniwa core libraries (`libassets`), MuJoCo and GLFW. A host links the libraries and registers the implementation through the interface's implementation entry (`hakoniwa-sensor-adapter`'s `sensor_adapter_implementation.hpp`). For hakoniwa-robot-runtime, see its sensor documentation.
 
 ## License
 
-- The binaries are free for non-commercial use. Commercial use needs a commercial license from Hakoniwa Lab ([contact](https://hakoniwa-lab.net/contact/)). See [LICENSE](LICENSE).
-- The test sources, tools and documents in this repository: see [LICENSE](LICENSE).
+- **The binaries** (release archives): free for evaluation (including technical evaluation and proof of concept inside companies), personal use, and academic research and education. Building them into a product or service, commercial operation, work for third parties and redistribution need a commercial license from Hakoniwa Lab LLC (tmori@hakoniwa-lab.net). See [LICENSE.md](LICENSE.md) (English) and [LICENSE-ja.md](LICENSE-ja.md) (Japanese, which prevails).
+- **The test sources, tools and documents** in this repository: MIT, see [LICENSE-tests](LICENSE-tests).
+- **Third-party components** in the binaries: see [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
 
 ## Tests
 
@@ -110,10 +111,10 @@ Passed / run. Common: the implementation descriptor, the MuJoCo ray caster and i
 
 ### macos-arm64
 
-- Run: 2026-11-15 11:14 UTC — 224 of 224 tests passed
-- Binary set built 2026-11-15T11:03:09Z from implementation `6319a852`, IMU and GNSS models `2732fc53`, interface (hakoniwa-sensor-adapter) `433de4fe`
+- Run: 2026-11-15 11:19 UTC — 225 of 225 tests passed
+- Binary set built 2026-11-15T11:18:48Z from implementation `6319a852`, IMU and GNSS models `2732fc53`, interface (hakoniwa-sensor-adapter) `433de4fe`
 - Toolchain: Apple clang version 21.0.0 (clang-2100.4.1.1)
-- Binary set: MANIFEST.json sha256 `1a1ad48ec3171ae92c72e83883675261f8a8626251aa31d7b8e6cb48642eaffa` (every file checked against it before the run)
+- Binary set: MANIFEST.json sha256 `229c6d59699b1da04a24ade719c7dc1b240a10aad558741af801fba1dba796cd` (every file checked against it before the run)
 
 | Sensor | Sensor model | On a MuJoCo model | External plugin |
 |---|---|---|---|
@@ -127,7 +128,7 @@ Passed / run. Common: the implementation descriptor, the MuJoCo ray caster and i
 | Rangefinder | 8 / 8 | 2 / 2 | — |
 | Depth camera | 9 / 9 | 4 / 4 | — |
 | RGB camera | 10 / 10 | 1 / 1 | — |
-| Common | 38 / 38 | 16 / 16 | 6 / 6 |
+| Common | 39 / 39 | 16 / 16 | 6 / 6 |
 
 Passed / run. Common: the implementation descriptor, the MuJoCo ray caster and image renderer, and mounting.
 

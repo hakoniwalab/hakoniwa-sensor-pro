@@ -1,0 +1,7 @@
+The binary files in the release archives: LicenseRef-hakoniwalab-sensor-pro-evaluation
+(free for evaluation, personal use, and academic research and education; a commercial
+license is needed for anything else). See LICENSE.md (English) and LICENSE-ja.md (Japanese).
+
+The test sources, tools and documents in this repository: MIT. See LICENSE-tests.
+
+Third-party components in the binary files: see THIRD_PARTY_NOTICES.md.

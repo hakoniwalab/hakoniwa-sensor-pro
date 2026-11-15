@@ -51,6 +51,30 @@ def platform_name():
     return f"{system}-{machine}"
 
 
+def strip_build_paths(plugin):
+    """The shipped plugin must not carry this machine's library paths: no rpath, and its libraries found by name.
+
+    macOS: delete every LC_RPATH, refer to GLFW as @rpath/libglfw.3.dylib, re-sign (ad hoc).
+    Linux: CMAKE_SKIP_RPATH leaves no RPATH/RUNPATH; checked here.
+    """
+    if platform.system() == "Darwin":
+        out = subprocess.run(["otool", "-l", str(plugin)], check=True, capture_output=True, text=True).stdout
+        lines = out.splitlines()
+        rpaths = [lines[i + 2].split()[1] for i, l in enumerate(lines) if "LC_RPATH" in l]
+        for r in rpaths:
+            run(["install_name_tool", "-delete_rpath", r, plugin])
+        deps = subprocess.run(["otool", "-L", str(plugin)], check=True, capture_output=True, text=True).stdout
+        for line in deps.splitlines()[1:]:
+            path = line.strip().split(" (")[0]
+            if "libglfw" in path and not path.startswith("@rpath/"):
+                run(["install_name_tool", "-change", path, "@rpath/" + Path(path).name, plugin])
+        run(["codesign", "--force", "--sign", "-", plugin])
+    elif platform.system() == "Linux":
+        out = subprocess.run(["readelf", "-d", str(plugin)], check=True, capture_output=True, text=True).stdout
+        if "RPATH" in out or "RUNPATH" in out:
+            sys.exit(f"{plugin} carries an RPATH/RUNPATH: " + " ".join(l for l in out.splitlines() if "PATH" in l))
+
+
 def sha256(path):
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
@@ -96,6 +120,7 @@ def main():
     os.environ["GIT_CEILING_DIRECTORIES"] = str(build / "sources")
     run(["cmake", "-S", exported["sensors-pro"], "-B", build / "cmake",
          "-DCMAKE_BUILD_TYPE=Release",
+         "-DCMAKE_SKIP_RPATH=ON",  # the host supplies the Hakoniwa, MuJoCo and GLFW libraries
          "-DHAKO_MUJOCO_SENSORS_BUILD_TESTS=OFF",
          "-DHAKO_SENSORS_WITH_DRONE_PRO=ON",
          f"-DHAKONIWA_DRONE_PRO_ROOT={exported['drone-pro']}",
@@ -111,6 +136,7 @@ def main():
     (dist / "lib").mkdir(parents=True)
     for name in LIBRARIES:
         shutil.copy2(build / "cmake" / name, dist / "lib" / PUBLISHED_NAMES.get(name, name))
+    strip_build_paths(dist / "lib" / "hakoniwa_mujoco_sensors_plugin.so")
     shutil.copytree(ROOT / "include", dist / "include")
 
     files = sorted(p for p in dist.rglob("*") if p.is_file())

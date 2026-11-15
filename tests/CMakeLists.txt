@@ -75,6 +75,8 @@ endfunction()
 find_package(Python3 REQUIRED COMPONENTS Interpreter)
 add_test(NAME no_physics_engine
          COMMAND Python3::Interpreter ${CMAKE_CURRENT_SOURCE_DIR}/binary/no_physics_engine.py ${HAKO_SENSOR_PRO_DIST})
+add_test(NAME no_build_paths
+         COMMAND Python3::Interpreter ${CMAKE_CURRENT_SOURCE_DIR}/binary/no_build_paths.py ${HAKO_SENSOR_PRO_DIST})
 
 # --- The sensor models behind the public interface ---
 foreach(name test_rangefinder test_lidar test_depth_camera test_rgb_camera
@@ -152,19 +154,29 @@ if(HAKO_MUJOCO_ROOT AND HAKO_MUJOCO_LIBRARY)
 
     # Public C ABI test of the shipped external sensor plugin. It deliberately does not link
     # any plugin implementation library: the binary is reached only through dlopen/dlsym.
-    file(READ "${REPO_ROOT}/MUJOCO_VERSION.txt" _mujoco_version)
-    string(STRIP "${_mujoco_version}" _mujoco_version)
-    add_executable(test_plugin_spec public/test_plugin_spec.cpp)
-    target_include_directories(test_plugin_spec PRIVATE
-        "${HAKONIWA_SENSOR_ADAPTER_ROOT}/include" "${HAKO_MUJOCO_ROOT}/include")
-    target_link_libraries(test_plugin_spec PRIVATE
-        "${HAKO_MUJOCO_LIBRARY}" GTest::gtest_main ${CMAKE_DL_LIBS})
-    if(APPLE)
-        target_link_options(test_plugin_spec PRIVATE "-Wl,-rpath,${HAKO_MUJOCO_ROOT}")
+    # The plugin carries no library search path; like a host, the test supplies the Hakoniwa core
+    # libraries (HAKONIWA_INSTALL_PREFIX), MuJoCo and GLFW.
+    set(HAKONIWA_INSTALL_PREFIX "" CACHE PATH "Hakoniwa core install prefix, for the plugin tests")
+    if(HAKONIWA_INSTALL_PREFIX)
+        file(READ "${REPO_ROOT}/MUJOCO_VERSION.txt" _mujoco_version)
+        string(STRIP "${_mujoco_version}" _mujoco_version)
+        get_target_property(_glfw_location glfw LOCATION)
+        get_filename_component(_glfw_dir "${_glfw_location}" DIRECTORY)
+        get_filename_component(_mujoco_lib_dir "${HAKO_MUJOCO_LIBRARY}" DIRECTORY)
+        set(_plugin_lib_dirs "${HAKONIWA_INSTALL_PREFIX}/lib;${_mujoco_lib_dir};${HAKO_MUJOCO_ROOT};${_glfw_dir}")
+        add_executable(test_plugin_spec public/test_plugin_spec.cpp)
+        target_include_directories(test_plugin_spec PRIVATE
+            "${HAKONIWA_SENSOR_ADAPTER_ROOT}/include" "${HAKO_MUJOCO_ROOT}/include")
+        target_link_libraries(test_plugin_spec PRIVATE
+            "${HAKO_MUJOCO_LIBRARY}" GTest::gtest_main ${CMAKE_DL_LIBS})
+        # macOS: the plugin's @rpath references resolve through the loading executable's run paths.
+        set_target_properties(test_plugin_spec PROPERTIES BUILD_RPATH "${_plugin_lib_dirs}")
+        target_compile_definitions(test_plugin_spec PRIVATE
+            HAKO_EXTERNAL_SENSOR_PLUGIN_PATH="${_lib}/hakoniwa_mujoco_sensors_plugin.so"
+            HAKO_SENSORS_CONFIG_DIR="${_s}/config"
+            HAKO_EXPECTED_MUJOCO_VERSION="${_mujoco_version}")
+        # Linux: a dlopen'ed library's dependencies are found through LD_LIBRARY_PATH.
+        string(REPLACE ";" ":" _plugin_lib_path "${_plugin_lib_dirs}")
+        gtest_discover_tests(test_plugin_spec PROPERTIES ENVIRONMENT "LD_LIBRARY_PATH=${_plugin_lib_path}")
     endif()
-    target_compile_definitions(test_plugin_spec PRIVATE
-        HAKO_EXTERNAL_SENSOR_PLUGIN_PATH="${_lib}/hakoniwa_mujoco_sensors_plugin.so"
-        HAKO_SENSORS_CONFIG_DIR="${_s}/config"
-        HAKO_EXPECTED_MUJOCO_VERSION="${_mujoco_version}")
-    gtest_discover_tests(test_plugin_spec)
 endif()
