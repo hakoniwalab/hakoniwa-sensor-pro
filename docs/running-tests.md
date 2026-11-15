@@ -67,13 +67,15 @@ cd ~/hakoniwa-sensor-check/hakoniwa-sensor-pro
 python3 tools/run-tests.py --dist ../hakoniwa-sensor-pro-0.1.0-macos-arm64 --mujoco-root ../mujoco-$(cat MUJOCO_VERSION.txt)
 ```
 
-It builds the tests in `build/tests-macos-arm64/` against the binaries and the interface only, runs them one at a time, and ends with a line such as:
+It first checks every file of the binary set against its `MANIFEST.json` (SHA-256) and stops if one differs, is missing or is extra:
 
 ```text
-202 of 202 passed
+binary set ../hakoniwa-sensor-pro-0.1.0-macos-arm64: every file matches MANIFEST.json (sha256 ...)
 ```
 
-The exit status is 0 when every test passed and 1 otherwise.
+Then it builds the tests in `build/tests-macos-arm64/` against the binaries and the interface only, runs them one at a time, and ends with a line `N of N passed`, N being the number of tests (the README's "Test status" gives the number for the released binary set).
+
+The exit status is 0 when every test passed and ctest succeeded, and 1 otherwise.
 
 ## 6. What it writes
 
@@ -81,7 +83,7 @@ Everything goes under `build/tests-macos-arm64/report/`; the repository's own fi
 
 | File | Contents |
 |---|---|
-| `results.json` | every test with its result, the totals by sensor and stage, and the binary set's source revisions and toolchain (from `MANIFEST.json`) |
+| `results.json` | every test with its result, the totals by sensor and stage, ctest's exit status, and the binary set it ran on: source revisions, toolchain and the SHA-256 of its `MANIFEST.json` |
 | `README-status.md` | the test status table, in the form of the README's "Test status" |
 | `traceability.md` | every requirement of the specification, the tests that check it, and the result of this run |
 

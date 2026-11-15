@@ -9,6 +9,7 @@ With --update-repository (maintainers) it writes results/<platform>.json, docs/t
 the status blocks of README.md instead. The tests run one at a time (ctest -j1).
 """
 import argparse
+import hashlib
 import json
 import platform
 import re
@@ -83,6 +84,21 @@ def classify(name):
     return ["Common"], "model"
 
 
+def verify_manifest(dist):
+    """Every file of the binary set matches MANIFEST.json, and no file is missing or extra."""
+    manifest = json.loads((dist / "MANIFEST.json").read_text())
+    listed = manifest["files"]
+    present = {str(p.relative_to(dist)) for p in dist.rglob("*") if p.is_file()} - {"MANIFEST.json", "LICENSE"}
+    errors = [f"missing: {f}" for f in sorted(set(listed) - present)]
+    errors += [f"not in MANIFEST.json: {f}" for f in sorted(present - set(listed))]
+    for f in sorted(set(listed) & present):
+        if hashlib.sha256((dist / f).read_bytes()).hexdigest() != listed[f]:
+            errors.append(f"SHA-256 differs: {f}")
+    if errors:
+        sys.exit("the binary set does not match its MANIFEST.json:\n  " + "\n  ".join(errors))
+    return manifest, hashlib.sha256((dist / "MANIFEST.json").read_bytes()).hexdigest()
+
+
 def run(cmd):
     print("+", " ".join(str(c) for c in cmd), flush=True)
     subprocess.run([str(c) for c in cmd], check=True)
@@ -95,7 +111,8 @@ def render(results):
                 f"- Run: {r['run']} — {r['passed']} of {r['total']} tests passed",
                 f"- Binary set built {r['binaries']['built']} from "
                 + ", ".join(f"{SOURCE_LABELS.get(n, n)} `{s['revision'][:8]}`" for n, s in r["binaries"]["sources"].items()),
-                f"- Toolchain: {r['binaries']['toolchain']['compiler']}", ""]
+                f"- Toolchain: {r['binaries']['toolchain']['compiler']}",
+                f"- Binary set: MANIFEST.json sha256 `{r['binaries'].get('manifest_sha256', '?')}` (every file checked against it before the run)", ""]
         out += ["| Sensor | " + " | ".join(t for _, t in STAGES) + " |", "|---|" + "---|" * len(STAGES)]
         for sensor in SENSORS:
             st = r["by_sensor"].get(sensor)
@@ -133,13 +150,18 @@ def main():
         extra += [f"-DHAKO_MUJOCO_ROOT={Path(args.mujoco_root).resolve()}", f"-DHAKO_MUJOCO_LIBRARY={lib}"]
 
     dist = Path(args.dist).resolve()
-    manifest = json.loads((dist / "MANIFEST.json").read_text())
+    manifest, manifest_sha256 = verify_manifest(dist)
+    print(f"binary set {dist}: every file matches MANIFEST.json (sha256 {manifest_sha256})")
 
     build = ROOT / "build" / f"tests-{manifest['platform']}"
     run(["cmake", "-S", ROOT / "tests", "-B", build, "-DCMAKE_BUILD_TYPE=Release", f"-DHAKO_SENSOR_PRO_DIST={dist}", *extra])
     run(["cmake", "--build", build, "-j8"])
     junit = build / "results.xml"
-    subprocess.run(["ctest", "-j1", "--output-junit", str(junit)], cwd=build)
+    if junit.exists():
+        junit.unlink()
+    ctest_exit = subprocess.run(["ctest", "-j1", "--output-junit", str(junit)], cwd=build).returncode
+    if not junit.exists():
+        sys.exit(f"ctest wrote no results (exit {ctest_exit})")
 
     cases = ET.parse(junit).getroot().iter("testcase")
     by_sensor, failed, total, passed, per_test = {}, [], 0, 0, {}
@@ -160,7 +182,9 @@ def main():
     result = {"platform": manifest["platform"],
               "run": datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC"),
               "total": total, "passed": passed, "failed": failed,
-              "binaries": {k: manifest[k] for k in ("built", "sources", "toolchain")},
+              "ctest_exit": ctest_exit,
+              "binaries": {**{k: manifest[k] for k in ("built", "sources", "toolchain")},
+                           "manifest_sha256": manifest_sha256},
               "by_sensor": by_sensor, "tests": per_test}
     if not args.update_repository:
         report = build / "report"
@@ -181,7 +205,10 @@ def main():
         (ROOT / "README.md").write_text(head + render(results) + tail)
         traceability.update(results)
     print(f"{passed} of {total} passed")
-    sys.exit(0 if passed == total else 1)
+    ok = passed == total and total > 0 and ctest_exit == 0
+    if not ok and ctest_exit != 0 and passed == total:
+        print(f"ctest exited {ctest_exit} although every recorded test passed")
+    sys.exit(0 if ok else 1)
 
 
 if __name__ == "__main__":

@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """Build the binary set from the private sources at the revisions in config/sources.json.
 
-The checkouts must be at those revisions with no changes to tracked files. The result is
+The sources are exported from the checkouts' git objects at those revisions (git archive), so the
+checkouts may be on any branch and need not be clean. The result is
 dist/<platform>/ with lib/, include/ and MANIFEST.json (sources, toolchain, sha256 of every file),
 the contents of one release archive.
 
@@ -10,6 +11,7 @@ the contents of one release archive.
 import argparse
 import hashlib
 import json
+import os
 import platform
 import shutil
 import subprocess
@@ -63,15 +65,25 @@ def main():
 
     sources = {n: s for n, s in json.loads((ROOT / "config/sources.json").read_text())["sources"].items()
                if n in ("sensors-pro", "drone-pro", "sensor-adapter")}
-    checkouts = {}
+    # The sources are exported from the git objects at the pinned revisions into an empty directory
+    # (git archive), so neither uncommitted changes nor untracked files of the checkouts reach the build.
+    build = Path(args.build_dir).resolve()
+    if build.exists():
+        shutil.rmtree(build)
+    exported = {}
     for name, s in sources.items():
         checkout = (ROOT / s["checkout"]).resolve()
-        head = git(checkout, "rev-parse", "HEAD")
-        if head != s["revision"]:
-            sys.exit(f"{name}: {checkout} is at {head}, config/sources.json says {s['revision']}")
-        if git(checkout, "status", "--porcelain", "--untracked-files=no"):
-            sys.exit(f"{name}: {checkout} has changes to tracked files")
-        checkouts[name] = checkout
+        git(checkout, "cat-file", "-e", s["revision"] + "^{commit}")
+        target = build / "sources" / name
+        target.mkdir(parents=True)
+        archive = subprocess.run(["git", "-C", str(checkout), "archive", s["revision"]], check=True, capture_output=True).stdout
+        subprocess.run(["tar", "-x", "-C", str(target)], input=archive, check=True)
+        exported[name] = target
+        print(f"{name}: {s['revision']} -> {target}")
+
+    # The copied tests and headers must be those of the same revisions.
+    if subprocess.run([sys.executable, str(ROOT / "tools/sync.py"), "--check"]).returncode != 0:
+        sys.exit("files copied by tools/sync.py differ from the sources at the pinned revisions; run tools/sync.py")
 
     mujoco_root = Path(args.mujoco_root).resolve()
     mujoco_version = (ROOT / "MUJOCO_VERSION.txt").read_text().strip()
@@ -80,26 +92,25 @@ def main():
     if mujoco_version not in mujoco_lib.name:
         sys.exit(f"MuJoCo library {mujoco_lib.name} is not version {mujoco_version} (MUJOCO_VERSION.txt)")
 
-    build = Path(args.build_dir).resolve()
-    if build.exists():
-        shutil.rmtree(build)
-    run(["cmake", "-S", checkouts["sensors-pro"], "-B", build,
+    # git inside the exported sources must not find this repository above them.
+    os.environ["GIT_CEILING_DIRECTORIES"] = str(build / "sources")
+    run(["cmake", "-S", exported["sensors-pro"], "-B", build / "cmake",
          "-DCMAKE_BUILD_TYPE=Release",
          "-DHAKO_MUJOCO_SENSORS_BUILD_TESTS=OFF",
          "-DHAKO_SENSORS_WITH_DRONE_PRO=ON",
-         f"-DHAKONIWA_DRONE_PRO_ROOT={checkouts['drone-pro']}",
-         f"-DHAKONIWA_SENSOR_ADAPTER_ROOT={checkouts['sensor-adapter']}",
+         f"-DHAKONIWA_DRONE_PRO_ROOT={exported['drone-pro']}",
+         f"-DHAKONIWA_SENSOR_ADAPTER_ROOT={exported['sensor-adapter']}",
          f"-DHAKONIWA_INSTALL_PREFIX={Path(args.hakoniwa_prefix).resolve()}",
          f"-DHAKO_MUJOCO_ROOT={mujoco_root}",
          f"-DHAKO_MUJOCO_LIBRARY={mujoco_lib}"])
-    run(["cmake", "--build", build, "-j8"])
+    run(["cmake", "--build", build / "cmake", "-j8"])
 
     dist = ROOT / "dist" / platform_name()
     if dist.exists():
         shutil.rmtree(dist)
     (dist / "lib").mkdir(parents=True)
     for name in LIBRARIES:
-        shutil.copy2(build / name, dist / "lib" / PUBLISHED_NAMES.get(name, name))
+        shutil.copy2(build / "cmake" / name, dist / "lib" / PUBLISHED_NAMES.get(name, name))
     shutil.copytree(ROOT / "include", dist / "include")
 
     files = sorted(p for p in dist.rglob("*") if p.is_file())
