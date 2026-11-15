@@ -18,6 +18,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from importlib import import_module  # noqa: E402
 
 platform_name = import_module("build-binaries").platform_name
+verify_manifest = import_module("run-tests").verify_manifest
 
 
 def main():
@@ -28,7 +29,21 @@ def main():
     args = ap.parse_args()
 
     dist = Path(args.dist).resolve()
-    manifest = json.loads((dist / "MANIFEST.json").read_text())
+    # The archive is made only from a binary set that matches its MANIFEST.json and whose test record
+    # (results/<platform>.json, written by run-tests.py --update-repository) is for that same MANIFEST
+    # and passed completely.
+    manifest, manifest_sha256 = verify_manifest(dist)
+    record_path = ROOT / "results" / f"{manifest['platform']}.json"
+    if not record_path.exists():
+        sys.exit(f"no test record {record_path}; run tools/run-tests.py --update-repository on this binary set")
+    record = json.loads(record_path.read_text())
+    if record["binaries"].get("manifest_sha256") != manifest_sha256:
+        sys.exit(f"{record_path.name} is for another binary set (MANIFEST.json sha256 "
+                 f"{record['binaries'].get('manifest_sha256')} != {manifest_sha256}); test this one first")
+    if record["passed"] != record["total"] or record["total"] == 0 or record.get("ctest_exit") != 0 or record["failed"]:
+        sys.exit(f"{record_path.name}: {record['passed']} of {record['total']} passed, ctest exit "
+                 f"{record.get('ctest_exit')}; only a fully passed binary set is packaged")
+    print(f"binary set matches MANIFEST.json and its test record: {record['passed']} of {record['total']} passed")
     license_file = ROOT / "LICENSE"
     if not license_file.exists() and not args.allow_no_license:
         sys.exit("LICENSE is missing")

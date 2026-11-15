@@ -27,7 +27,8 @@ BEGIN, END = "<!-- test-status:begin -->", "<!-- test-status:end -->"
 
 SENSORS = ["Joint", "Force-torque", "IMU", "Magnetometer", "Barometer", "GNSS",
            "2D/3D LiDAR", "Rangefinder", "Depth camera", "RGB camera", "Common"]
-STAGES = [("model", "Sensor model"), ("mujoco", "On a MuJoCo model")]
+STAGES = [("model", "Sensor model"), ("mujoco", "On a MuJoCo model"),
+          ("plugin", "External plugin")]
 
 # Test suite (or ctest name) -> (sensors, stage).
 SUITE = {
@@ -48,6 +49,8 @@ SUITE = {
     "mujoco_depth_camera": ("Depth camera", "mujoco"), "mujoco_rgb_camera": ("RGB camera, Depth camera", "mujoco"),
     "no_physics_engine": ("Common", "model"),
     "PluginJoint": ("Joint", "plugin"), "PluginForceTorque": ("Force-torque", "plugin"),
+    "PluginSpec": ("Common", "plugin"),
+    "PublicForceTorqueSpec": ("Force-torque", "model"), "PublicJointSpec": ("Joint", "model"),
 }
 # Test ID T_<code>_<U|I>...: the code names the sensor; U is a unit test of the model,
 # I an integration test (on MuJoCo, or through the plugin for PLG).
@@ -69,7 +72,16 @@ def platform_name():
 def classify(name):
     """(sensors, stage) of a test."""
     suite, _, test = name.partition(".")
+    if suite == "PublicImuGnssSpec" and not test.startswith("T_"):
+        for word, sensor in (("Gyro", "IMU"), ("Accel", "IMU"), ("Magnetometer", "Magnetometer"),
+                             ("Baro", "Barometer"), ("Gps", "GNSS")):
+            if test.startswith(word):
+                return [sensor], "model"
     m = re.match(r"T_([A-Z]{3})_([UI])", test)
+    if m and m.group(1) in ("ACC", "GYR", "MAG", "BAR", "GPS") or (m and m.group(1) == "COM"
+                                                                     and suite in ("SensorModels", "PublicImuGnssSpec")):
+        # The IMU, magnetometer, barometer and GNSS tests use no MuJoCo, whatever their stage letter.
+        return [ID[m.group(1)]], "model"
     if m and m.group(1) in ID:
         stage = "model" if m.group(2) == "U" else ("plugin" if m.group(1) == "PLG" or suite.startswith("Plugin") else "mujoco")
         sensor = ID[m.group(1)]
@@ -140,7 +152,7 @@ def main():
                     help="maintainers: write results/<platform>.json, docs/traceability.md and the README status "
                          "(default: write them under build/tests-<platform>/report/ only)")
     args = ap.parse_args()
-    extra = []
+    extra = ["-DHAKO_MUJOCO_ROOT=", "-DHAKO_MUJOCO_LIBRARY="]  # cleared unless given, so an old cache cannot linger
     if args.mujoco_root:
         version = (ROOT / "MUJOCO_VERSION.txt").read_text().strip()
         lib = args.mujoco_library or next(str(p) for p in sorted(Path(args.mujoco_root, "lib").glob("libmujoco*"))

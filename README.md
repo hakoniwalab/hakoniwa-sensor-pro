@@ -60,12 +60,16 @@ A host links the libraries and registers the implementation through the interfac
 
 ## Tests
 
-The tests check the binaries against the specification. They are the implementation's own tests, copied unchanged ([config/synced-files.json](config/synced-files.json)) from the revisions the binaries are built from ([config/sources.json](config/sources.json)), and here they are built against the released binaries only.
+The tests check the binaries against the specification. There are two kinds, both built against the released binaries and public headers only:
+
+- the implementation's own tests, copied unchanged ([config/synced-files.json](config/synced-files.json)) from the revisions the binaries are built from ([config/sources.json](config/sources.json)): `tests/sensors/`, `tests/imu-gnss/`;
+- tests written in this repository from the public specification: `tests/public/` (requirements no copied test covered, and the external sensor plugin through its C boundary) and `tests/binary/` (checks of the binary set itself).
 
 | Stage | What it checks |
 |---|---|
 | Sensor model | Each sensor's error model behind the interface, with the true values given by the test: hand-computed examples, statistics of the noise and drift, boundaries of rounding and ranges, seeds and reset, configuration errors |
 | On a MuJoCo model | The sensors on a small MuJoCo world written in the test: rays against walls and floors, forces and joint torques of a hanging tool, rendered images against rays |
+| External plugin | The shipped plugin loaded through its C boundary only: entry and version, errors, lifecycle (create, start, step, stop, restart, reset, destroy) and step times. The boundary has no call that returns a measurement, so the measured values are checked by the stages above, not here |
 
 The IMU, magnetometer, barometer and GNSS tests use the model classes directly, through the public headers in `include/hakoniwa/imu_gnss_sensors/` (declarations only).
 
@@ -88,42 +92,42 @@ The result of the last run on each platform, by sensor and stage (written by `to
 - Toolchain: c++ (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0
 - Binary set: MANIFEST.json sha256 `d15321cc43df073136764e22d6b26b04b4ebdbab793d77c4a01343561c809cad` (every file checked against it before the run)
 
-| Sensor | Sensor model | On a MuJoCo model |
-|---|---|---|
-| Joint | 15 / 15 | 2 / 2 |
-| Force-torque | 15 / 15 | 5 / 5 |
-| IMU | 30 / 30 | — |
-| Magnetometer | 6 / 6 | — |
-| Barometer | 17 / 17 | — |
-| GNSS | 16 / 16 | — |
-| 2D/3D LiDAR | 12 / 12 | 2 / 2 |
-| Rangefinder | 8 / 8 | 2 / 2 |
-| Depth camera | 9 / 9 | 4 / 4 |
-| RGB camera | 10 / 10 | 1 / 1 |
-| Common | 50 / 50 | 17 / 17 |
+| Sensor | Sensor model | On a MuJoCo model | External plugin |
+|---|---|---|---|
+| Joint | 15 / 15 | 2 / 2 | — |
+| Force-torque | 15 / 15 | 5 / 5 | — |
+| IMU | 30 / 30 | — | — |
+| Magnetometer | 6 / 6 | — | — |
+| Barometer | 17 / 17 | — | — |
+| GNSS | 16 / 16 | — | — |
+| 2D/3D LiDAR | 12 / 12 | 2 / 2 | — |
+| Rangefinder | 8 / 8 | 2 / 2 | — |
+| Depth camera | 9 / 9 | 4 / 4 | — |
+| RGB camera | 10 / 10 | 1 / 1 | — |
+| Common | 50 / 50 | 17 / 17 | — |
 
 Passed / run. Common: the implementation descriptor, the MuJoCo ray caster and image renderer, and mounting.
 
 ### macos-arm64
 
-- Run: 2026-11-15 11:03 UTC — 218 of 218 tests passed
+- Run: 2026-11-15 11:14 UTC — 224 of 224 tests passed
 - Binary set built 2026-11-15T11:03:09Z from implementation `6319a852`, IMU and GNSS models `2732fc53`, interface (hakoniwa-sensor-adapter) `433de4fe`
 - Toolchain: Apple clang version 21.0.0 (clang-2100.4.1.1)
 - Binary set: MANIFEST.json sha256 `1a1ad48ec3171ae92c72e83883675261f8a8626251aa31d7b8e6cb48642eaffa` (every file checked against it before the run)
 
-| Sensor | Sensor model | On a MuJoCo model |
-|---|---|---|
-| Joint | 15 / 15 | 2 / 2 |
-| Force-torque | 15 / 15 | 5 / 5 |
-| IMU | 30 / 30 | — |
-| Magnetometer | 6 / 6 | — |
-| Barometer | 17 / 17 | — |
-| GNSS | 16 / 16 | — |
-| 2D/3D LiDAR | 12 / 12 | 2 / 2 |
-| Rangefinder | 8 / 8 | 2 / 2 |
-| Depth camera | 9 / 9 | 4 / 4 |
-| RGB camera | 10 / 10 | 1 / 1 |
-| Common | 50 / 50 | 17 / 17 |
+| Sensor | Sensor model | On a MuJoCo model | External plugin |
+|---|---|---|---|
+| Joint | 18 / 18 | 2 / 2 | — |
+| Force-torque | 20 / 20 | 5 / 5 | — |
+| IMU | 34 / 34 | — | — |
+| Magnetometer | 7 / 7 | — | — |
+| Barometer | 17 / 17 | — | — |
+| GNSS | 16 / 16 | — | — |
+| 2D/3D LiDAR | 12 / 12 | 2 / 2 | — |
+| Rangefinder | 8 / 8 | 2 / 2 | — |
+| Depth camera | 9 / 9 | 4 / 4 | — |
+| RGB camera | 10 / 10 | 1 / 1 | — |
+| Common | 38 / 38 | 16 / 16 | 6 / 6 |
 
 Passed / run. Common: the implementation descriptor, the MuJoCo ray caster and image renderer, and mounting.
 

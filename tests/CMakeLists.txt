@@ -149,4 +149,22 @@ if(HAKO_MUJOCO_ROOT AND HAKO_MUJOCO_LIBRARY)
     sensor_gtest(test_mujoco_image_renderer hakoniwa_mujoco_sensors_renderer)
     sensor_gtest(test_mujoco_depth_render hakoniwa_mujoco_sensors_adapters hakoniwa_mujoco_sensors_renderer)
     sensor_test(mujoco_rgb_camera_test mujoco_rgb_camera hakoniwa_mujoco_sensors_adapters hakoniwa_mujoco_sensors_renderer)
+
+    # Public C ABI test of the shipped external sensor plugin. It deliberately does not link
+    # any plugin implementation library: the binary is reached only through dlopen/dlsym.
+    file(READ "${REPO_ROOT}/MUJOCO_VERSION.txt" _mujoco_version)
+    string(STRIP "${_mujoco_version}" _mujoco_version)
+    add_executable(test_plugin_spec public/test_plugin_spec.cpp)
+    target_include_directories(test_plugin_spec PRIVATE
+        "${HAKONIWA_SENSOR_ADAPTER_ROOT}/include" "${HAKO_MUJOCO_ROOT}/include")
+    target_link_libraries(test_plugin_spec PRIVATE
+        "${HAKO_MUJOCO_LIBRARY}" GTest::gtest_main ${CMAKE_DL_LIBS})
+    if(APPLE)
+        target_link_options(test_plugin_spec PRIVATE "-Wl,-rpath,${HAKO_MUJOCO_ROOT}")
+    endif()
+    target_compile_definitions(test_plugin_spec PRIVATE
+        HAKO_EXTERNAL_SENSOR_PLUGIN_PATH="${_lib}/hakoniwa_mujoco_sensors_plugin.so"
+        HAKO_SENSORS_CONFIG_DIR="${_s}/config"
+        HAKO_EXPECTED_MUJOCO_VERSION="${_mujoco_version}")
+    gtest_discover_tests(test_plugin_spec)
 endif()

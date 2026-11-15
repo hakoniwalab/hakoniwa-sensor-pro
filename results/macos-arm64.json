@@ -1,8 +1,8 @@
 {
   "platform": "macos-arm64",
-  "run": "2026-11-15 11:03 UTC",
-  "total": 218,
-  "passed": 218,
+  "run": "2026-11-15 11:14 UTC",
+  "total": 224,
+  "passed": 224,
   "failed": [],
   "ctest_exit": 0,
   "binaries": {
@@ -73,8 +73,8 @@
     },
     "Force-torque": {
       "model": {
-        "total": 15,
-        "passed": 15
+        "total": 20,
+        "passed": 20
       },
       "mujoco": {
         "total": 5,
@@ -83,8 +83,8 @@
     },
     "Joint": {
       "model": {
-        "total": 15,
-        "passed": 15
+        "total": 18,
+        "passed": 18
       },
       "mujoco": {
         "total": 2,
@@ -93,24 +93,28 @@
     },
     "Common": {
       "model": {
-        "total": 50,
-        "passed": 50
+        "total": 38,
+        "passed": 38
       },
       "mujoco": {
-        "total": 17,
-        "passed": 17
+        "total": 16,
+        "passed": 16
+      },
+      "plugin": {
+        "total": 6,
+        "passed": 6
       }
     },
     "IMU": {
       "model": {
-        "total": 30,
-        "passed": 30
+        "total": 34,
+        "passed": 34
       }
     },
     "Magnetometer": {
       "model": {
-        "total": 6,
-        "passed": 6
+        "total": 7,
+        "passed": 7
       }
     },
     "GNSS": {
@@ -334,6 +338,12 @@
     "MujocoImageRenderer.T_MJI_I1_060_RestoresTheHostContextAndHints": true,
     "MujocoImageRenderer.T_MJI_I1_070_LeavesHostOwnedGlfwRunning": true,
     "DepthCamera.T_DEP_I1_020_MujocoRayAgainstRender": true,
+    "PluginSpec.T_PLG_I1_010_EntryAndFunctionTable": true,
+    "PluginSpec.T_PLG_I1_020_CreateFailuresAreReportedAndTerminated": true,
+    "PluginSpec.T_PLG_I1_030_LifecycleRestartsAndResetReplaysTheSameInputs": true,
+    "PluginSpec.T_PLG_I1_040_StepUsesPostPhysicsTime": true,
+    "PluginSpec.T_PLG_I1_050_RegisterServicesWithoutHakoniwaFailsCleanly": true,
+    "PluginSpec.T_PLG_I1_060_MountedRangefinderStepsInKnownGeometry": true,
     "no_physics_engine": true,
     "rangefinder_adapter": true,
     "lidar_adapter": true,
