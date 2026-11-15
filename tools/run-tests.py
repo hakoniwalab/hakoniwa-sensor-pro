@@ -148,6 +148,8 @@ def main():
     ap.add_argument("--dist", default=str(ROOT / "dist" / platform_name()))
     ap.add_argument("--mujoco-root", help="MuJoCo release directory: adds the tests on a MuJoCo model")
     ap.add_argument("--mujoco-library", help="MuJoCo library file")
+    ap.add_argument("--exclude", help="ctest -E regular expression: tests not to run (recorded in the results), "
+                    "for example the renderer tests on a machine without a display")
     ap.add_argument("--hakoniwa-prefix", help="Hakoniwa core install prefix: adds the external plugin tests "
                     "(with --mujoco-root)")
     ap.add_argument("--update-repository", action="store_true",
@@ -175,7 +177,8 @@ def main():
     junit = build / "results.xml"
     if junit.exists():
         junit.unlink()
-    ctest_exit = subprocess.run(["ctest", "-j1", "--output-junit", str(junit)], cwd=build).returncode
+    ctest = ["ctest", "-j1", "--output-junit", str(junit)] + (["-E", args.exclude] if args.exclude else [])
+    ctest_exit = subprocess.run(ctest, cwd=build).returncode
     if not junit.exists():
         sys.exit(f"ctest wrote no results (exit {ctest_exit})")
 
@@ -198,7 +201,7 @@ def main():
     result = {"platform": manifest["platform"],
               "run": datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC"),
               "total": total, "passed": passed, "failed": failed,
-              "ctest_exit": ctest_exit,
+              "ctest_exit": ctest_exit, "excluded": args.exclude or "",
               "binaries": {**{k: manifest[k] for k in ("built", "sources", "toolchain")},
                            "manifest_sha256": manifest_sha256},
               "by_sensor": by_sensor, "tests": per_test}
