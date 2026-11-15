@@ -1,0 +1,349 @@
+{
+  "platform": "linux-x64",
+  "run": "2026-11-15 11:05 UTC",
+  "total": 218,
+  "passed": 218,
+  "failed": [],
+  "ctest_exit": 0,
+  "binaries": {
+    "built": "2026-11-15T11:04:49Z",
+    "sources": {
+      "sensors-pro": {
+        "repository": "hakoniwalab/hakoniwa-mujoco-sensors-pro",
+        "revision": "6319a85204edcf57b37d8dcfcf1f9f31016a4378"
+      },
+      "drone-pro": {
+        "repository": "hakoniwalab/hakoniwa-drone-pro",
+        "revision": "2732fc53f2a2027905f7ca49c21b25e36fe9cc7c"
+      },
+      "sensor-adapter": {
+        "repository": "hakoniwalab/hakoniwa-sensor-adapter",
+        "revision": "433de4feda852317f1f1a0d6ea47d3e0b0af7ce4"
+      }
+    },
+    "toolchain": {
+      "cmake": "cmake version 3.28.3",
+      "compiler": "c++ (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0",
+      "build_type": "Release",
+      "mujoco_library": "libmujoco.so.3.16.0",
+      "mujoco_version": "3.16.0"
+    },
+    "manifest_sha256": "d15321cc43df073136764e22d6b26b04b4ebdbab793d77c4a01343561c809cad"
+  },
+  "by_sensor": {
+    "Rangefinder": {
+      "model": {
+        "total": 8,
+        "passed": 8
+      },
+      "mujoco": {
+        "total": 2,
+        "passed": 2
+      }
+    },
+    "2D/3D LiDAR": {
+      "model": {
+        "total": 12,
+        "passed": 12
+      },
+      "mujoco": {
+        "total": 2,
+        "passed": 2
+      }
+    },
+    "Depth camera": {
+      "model": {
+        "total": 9,
+        "passed": 9
+      },
+      "mujoco": {
+        "total": 4,
+        "passed": 4
+      }
+    },
+    "RGB camera": {
+      "model": {
+        "total": 10,
+        "passed": 10
+      },
+      "mujoco": {
+        "total": 1,
+        "passed": 1
+      }
+    },
+    "Force-torque": {
+      "model": {
+        "total": 15,
+        "passed": 15
+      },
+      "mujoco": {
+        "total": 5,
+        "passed": 5
+      }
+    },
+    "Joint": {
+      "model": {
+        "total": 15,
+        "passed": 15
+      },
+      "mujoco": {
+        "total": 2,
+        "passed": 2
+      }
+    },
+    "Common": {
+      "model": {
+        "total": 50,
+        "passed": 50
+      },
+      "mujoco": {
+        "total": 17,
+        "passed": 17
+      }
+    },
+    "IMU": {
+      "model": {
+        "total": 30,
+        "passed": 30
+      }
+    },
+    "Magnetometer": {
+      "model": {
+        "total": 6,
+        "passed": 6
+      }
+    },
+    "GNSS": {
+      "model": {
+        "total": 16,
+        "passed": 16
+      }
+    },
+    "Barometer": {
+      "model": {
+        "total": 17,
+        "passed": 17
+      }
+    }
+  },
+  "tests": {
+    "Rangefinder.T_RNG_U2_010_OutputAndVariance": true,
+    "Rangefinder.T_RNG_U2_020_RangeBoundaries": true,
+    "Rangefinder.T_RNG_U2_030_ConeGrid": true,
+    "Rangefinder.T_RNG_U2_040_NoiseStatistics": true,
+    "Rangefinder.T_RNG_U2_050_CastDistance": true,
+    "Rangefinder.T_RNG_U2_060_TrueRangeLog": true,
+    "Rangefinder.T_RNG_U3_010_ConeDefaultsAndValidation": true,
+    "Lidar.T_LID_U2_010_AngleGrid": true,
+    "Lidar.T_LID_U2_020_WallAndFluAxes": true,
+    "Lidar.T_LID_U2_030_RowMajorVerticalGrid": true,
+    "Lidar.T_LID_U2_040_RotationSchedule": true,
+    "Lidar.T_LID_U2_050_RotatingOutputTiming": true,
+    "Lidar.T_LID_U2_060_InstantScan": true,
+    "Lidar.T_LID_U2_070_PointsAndIntensity": true,
+    "Lidar.T_LID_U2_080_SaturationFlag": true,
+    "Lidar.T_LID_U2_090_HeldScanAndBufferSwap": true,
+    "Lidar.T_LID_U2_100_CastDistanceAndLog": true,
+    "Lidar.T_LID_U3_010_GridAndModeValidation": true,
+    "DepthCamera.T_DEP_U2_010_OutputAndCameraInfo": true,
+    "DepthCamera.T_DEP_U2_020_PlanarAndPerspective": true,
+    "DepthCamera.T_DEP_U2_030_RayDirections": true,
+    "DepthCamera.T_DEP_U2_040_RayBatchAndDistance": true,
+    "DepthCamera.T_DEP_U2_050_RenderDepthAndRequest": true,
+    "DepthCamera.T_DEP_U2_060_NoiseAndNoReturn": true,
+    "DepthCamera.T_DEP_U2_070_Capabilities": true,
+    "DepthCamera.T_DEP_U3_010_DefaultsAndInvalidConfiguration": true,
+    "RgbCamera.T_RGB_U2_010_OutputAndCameraInfo": true,
+    "RgbCamera.T_RGB_U2_020_RenderRequest": true,
+    "RgbCamera.T_RGB_U2_030_ChannelNoise": true,
+    "RgbCamera.T_RGB_U2_040_MissingColourImage": true,
+    "RgbCamera.T_RGB_U2_050_StereoBatchPoseAndProjection": true,
+    "RgbCamera.T_RGB_U2_060_PerCameraNoiseStreams": true,
+    "RgbCamera.T_RGB_U2_070_LegacyUnnamedCameraKeepsNoiseSequence": true,
+    "RgbCamera.T_RGB_U3_020_StereoValidation": true,
+    "RgbCamera.T_RGB_U3_010_ConfigurationValidation": true,
+    "ForceTorque.IdealPassesTruthOnPeriod": true,
+    "ForceTorque.WrongTimeIsAnErrorWithoutSideEffects": true,
+    "ForceTorque.DelayByWholeSteps": true,
+    "ForceTorque.LowpassDcAndCutoffGain": true,
+    "ForceTorque.NonlinearityShape": true,
+    "ForceTorque.CalibrationMatrixBoundsAndLinearity": true,
+    "ForceTorque.BiasConstantWithinBound": true,
+    "ForceTorque.DriftIncrementSigma": true,
+    "ForceTorque.NoiseBandwidthConversion": true,
+    "ForceTorque.ClampAndOverloadFlags": true,
+    "ForceTorque.TareAveragesWindow": true,
+    "ForceTorque.ResolutionRounding": true,
+    "ForceTorque.SeedsStreamsAndReset": true,
+    "ForceTorque.ConfigErrors": true,
+    "ForceTorque.CapabilitiesAndLog": true,
+    "JointSensor.IdealPassesTruth": true,
+    "JointSensor.JointSideCounts": true,
+    "JointSensor.MotorSideResolution": true,
+    "JointSensor.BacklashPlayOperator": true,
+    "JointSensor.StiffnessDeflection": true,
+    "JointSensor.OffsetAndIncremental": true,
+    "JointSensor.CyclicErrorBound": true,
+    "JointSensor.SingleTurnWrap": true,
+    "JointSensor.VelocityFromDifference": true,
+    "JointSensor.VelocityLsbRpm": true,
+    "JointSensor.TorqueSourcesAndErrors": true,
+    "JointSensor.EncoderNoiseCounts": true,
+    "JointSensor.SeedsAndReset": true,
+    "JointSensor.ConfigErrors": true,
+    "JointSensor.CapabilitiesAndExamples": true,
+    "ImplementationDescriptor.EntryPointNamesTheImplementation": true,
+    "ImplementationDescriptor.ProvidesEveryAdapterOfThisLibraryAndNothingElse": true,
+    "ImplementationDescriptor.CreatesTheJointAdapterAndReportsFailures": true,
+    "PublicForceTorqueSpec.ConvertsNormalisedValuesBackToPhysicalUnits": true,
+    "PublicForceTorqueSpec.AddsConfiguredGaussianNoise": true,
+    "PublicForceTorqueSpec.SubtractsTheStoredTare": true,
+    "PublicForceTorqueSpec.AcceptsEquivalentAxisGroupFormsAndScalarNonlinearity": true,
+    "PublicForceTorqueSpec.AcceptsEquivalentCalibrationFractionForms": true,
+    "PublicJointSpec.RejectsOffGridRepeatedAndBackwardTimesWithoutChangingState": true,
+    "PublicJointSpec.FloorsDelayAtStepBoundariesAndUsesTimeZeroHistory": true,
+    "PublicJointSpec.AcceptsEquivalentAngleVelocityAndFractionUnits": true,
+    "SensorModels.T_COM_U1_010_MountingRotation": true,
+    "SensorModels.T_COM_U1_020_VectorRotation": true,
+    "SensorModels.T_COM_U1_030_RigidBodyPoint": true,
+    "SensorModels.T_COM_U1_040_DelayLine": true,
+    "SensorModels.T_COM_U1_060_Clamp": true,
+    "SensorModels.T_COM_U1_070_DerivedSeed": true,
+    "SensorModels.T_COM_U1_080_GaussMarkovStatistics": true,
+    "SensorModels.T_COM_U1_090_InitialStationaryDistribution": true,
+    "SensorModels.T_COM_U1_100_AutopilotPosition": true,
+    "SensorModels.T_COM_U1_110_Px4BoardRotation": true,
+    "SensorModels.T_COM_U1_115_Px4BoardRotationSharedCases": true,
+    "SensorModels.T_COM_U1_120_ArduPilotBoardRotation": true,
+    "SensorModels.T_COM_U1_125_AutopilotRotationMatricesUseKnownValues": true,
+    "SensorModels.T_COM_U1_130_SDFormatConversion": true,
+    "SensorModels.T_COM_U1_140_ResolutionRounding": true,
+    "SensorModels.T_COM_U2_070_UpdatePeriodSamplesAndHolds": true,
+    "SensorModels.T_COM_U3_070_SampleCountValidation": true,
+    "SensorModels.T_COM_U1_150_NoiseDensityConversion": true,
+    "SensorModels.T_COM_U2_060_NoiseDensityMatchesNoiseBitForBit": true,
+    "SensorModels.T_COM_U3_060_NoiseDensityValidationAndForms": true,
+    "SensorModels.T_ACC_U2_010_Through_070_PhysicsAndMount": true,
+    "SensorModels.T_ACC_U2_080_Through_100_Order": true,
+    "SensorModels.T_ACC_U2_130_150_170_OffsetAndRange": true,
+    "SensorModels.T_ACC_U2_110_120_140_NoiseDriftAndReset": true,
+    "SensorModels.T_ACC_U1_070_RecordsTheStartupDraw": true,
+    "SensorModels.T_COM_U2_030_AccelerationOffsetDoesNotChangeNoiseSequence": true,
+    "SensorModels.T_ACC_U3_010_Through_060_ConfigValidation": true,
+    "SensorModels.T_MAG_U2_010_Through_090_FieldMountAndOrder": true,
+    "SensorModels.T_MAG_U2_120_Through_150_SoftIronResolutionRange": true,
+    "SensorModels.T_MAG_U2_020_030_050_060_FieldCases": true,
+    "SensorModels.T_MAG_U2_100_110_NoiseDriftAndReset": true,
+    "SensorModels.T_COM_U2_030_GeomagnetAxisNoiseStreamsAreIndependent": true,
+    "SensorModels.T_MAG_U3_020_Through_070_ConfigValidation": true,
+    "SensorModels.T_COM_U2_010_ImuMountRotatesAccelerationGyroAndGeomagnetEqually": true,
+    "SensorModels.T_ACC_U2_160_SensorAxisIsClampedAfterYaw45Rotation": true,
+    "SensorModels.T_GPS_U1_020_LongDistanceWgs84ApproximationBounds": true,
+    "SensorModels.T_COM_U3_020_MissingMountDefaultsToZeroPositionAndOrientation": true,
+    "SensorModels.T_COM_U3_030_GyroLocalMountIsRejected": true,
+    "SensorModels.T_COM_U3_040_UnknownGyroFieldWarnsAndKnownValuesRemainReadable": true,
+    "SensorModels.T_COM_U3_050_SensorNumericFieldsRejectWrongJsonTypes": true,
+    "SensorModels.T_GYR_U2_001_DisallowedMountHasOnlyIntendedError": true,
+    "SensorModels.T_GYR_U2_002_NoticeListsConfiguredNewSettings": true,
+    "SensorModels.T_GYR_U2_003_NoticeReportsNoNewSettings": true,
+    "SensorModels.T_GYR_U2_004_NoticeIsEmittedOnceForEachAircraft": true,
+    "SensorModels.T_GYR_U2_010_AxesAndUnits": true,
+    "SensorModels.T_GYR_U2_020_Yaw90": true,
+    "SensorModels.T_COM_U3_010_OrientationRequiresExactObjectShape": true,
+    "SensorModels.T_GYR_U2_030_PositionIgnored": true,
+    "SensorModels.T_GYR_U2_040_RotateBeforeClamp": true,
+    "SensorModels.T_GYR_U2_050_ResolutionBeforeClamp": true,
+    "SensorModels.T_GYR_U2_060_NoiseStatistics": true,
+    "SensorModels.T_GYR_U2_070_ArdupilotTriangle": true,
+    "SensorModels.T_GYR_U2_080_RandomWalkReproducible": true,
+    "SensorModels.T_GYR_U2_081_ZeroSeedReproducible": true,
+    "SensorModels.T_COM_U2_040_ResetRestoresGyroSequence": true,
+    "SensorModels.T_COM_U2_030_GyroAxisNoiseStreamsAreIndependent": true,
+    "SensorModels.T_GYR_U2_090_GaussMarkovStatistics": true,
+    "SensorModels.T_GYR_U2_100_DriftInSensorAxes": true,
+    "SensorModels.T_GYR_U2_110_RangeBoundaries": true,
+    "SensorModels.T_GYR_U2_120_SensorAxisClamp": true,
+    "SensorModels.T_GYR_U2_130_SensitivityAfterRotation": true,
+    "SensorModels.T_GYR_U2_140_FixedZeroRate": true,
+    "SensorModels.T_GYR_U2_150_RandomZeroRate": true,
+    "SensorModels.T_GYR_U3_010_NoiseParsing": true,
+    "SensorModels.T_GYR_U3_020_ZeroRateParsing": true,
+    "SensorModels.T_BAR_U1_010_Through_030_StandardAtmosphere": true,
+    "SensorModels.T_BAR_U1_040_050_110_InverseAtmosphere": true,
+    "SensorModels.T_BAR_U1_060_AtmosphereBoundaryIsMonotonicAndInvertible": true,
+    "SensorModels.T_BAR_U1_130_AtmosphereClampsAboveCeiling": true,
+    "SensorModels.T_BAR_U2_010_020_030_AtmosphereOutputs": true,
+    "SensorModels.T_BAR_U2_050_MountOrientationIsIgnoredByConfiguration": true,
+    "SensorModels.T_BAR_U2_060_080_110_OrderAndOutputs": true,
+    "SensorModels.T_BAR_U2_070_120_NoisePeriodAndReset": true,
+    "SensorModels.T_BAR_U2_090_100_ResolutionRangeAndAltitude": true,
+    "SensorModels.T_BAR_U2_120_NoiseStatistics": true,
+    "SensorModels.T_COM_U2_030_BarometerOffsetDoesNotChangeNoiseSequence": true,
+    "SensorModels.T_BAR_U2_130_GaussMarkovStatistics": true,
+    "SensorModels.T_BAR_U2_140_150_ZeroOffsetIsStableAndDistributed": true,
+    "SensorModels.T_BAR_U2_160_DelayAppliesToHeightButNotWeather": true,
+    "SensorModels.T_BAR_U2_190_200_WarningsAndInvalidAtmosphereTransitions": true,
+    "SensorModels.T_BAR_U3_010_Through_040_ConfigValidation": true,
+    "SensorModels.T_BAR_U2_NotificationIncludesBaroAndIsOncePerAircraft": true,
+    "SensorModels.T_GPS_U1_010_030_Wgs84LocalConversion": true,
+    "SensorModels.T_GPS_U3_175_V2SettingsRequireTheUpdatePeriod": true,
+    "SensorModels.T_GPS_U1_070_ReferenceStateIsTheBodyOriginTruth": true,
+    "SensorModels.T_GPS_U2_020_030_GroundSpeedAndCourse": true,
+    "SensorModels.T_GPS_U2_040_050_AccuracyAndAntennaState": true,
+    "SensorModels.T_GPS_U2_070_120_DelayThenSampling": true,
+    "SensorModels.T_GPS_U3_010_020_030_ConfigValidation": true,
+    "SensorModels.T_GPS_U2_010_060_AxesCourseAndUnusedOrientation": true,
+    "SensorModels.T_GPS_U2_030_AllCardinalCourses": true,
+    "SensorModels.T_GPS_U2_080_090_PositionAndVelocityNoiseStatistics": true,
+    "SensorModels.T_GPS_U2_100_GaussMarkovStatistics": true,
+    "SensorModels.T_GPS_U2_110_And_U3_NoErrorAndValidationBoundaries": true,
+    "SensorModels.T_GPS_U2_030_040_ResetAndIndependentRandomStreams": true,
+    "SensorModels.T_GPS_U2_NotificationIncludesGpsAndIsOncePerAircraft": true,
+    "SensorModels.T_COM_U1_160_PeriodNotWholeStepsWarns": true,
+    "PublicImuGnssSpec.T_COM_U2_020_ValueCreatedOnBoundaryAndHeldUntilTheNext": true,
+    "PublicImuGnssSpec.T_COM_I1_050_UpdatePeriodMeasuresAndEmitsEveryFourSteps": true,
+    "PublicImuGnssSpec.GyroOmittedSensitivityMatchesExplicitIdentity": true,
+    "PublicImuGnssSpec.GyroOmittedResolutionDoesNotRound": true,
+    "PublicImuGnssSpec.AccelOmittedSensitivityMatchesExplicitIdentity": true,
+    "PublicImuGnssSpec.AccelOmittedResolutionDoesNotRound": true,
+    "PublicImuGnssSpec.MagnetometerOmittedResolutionDoesNotRound": true,
+    "MujocoRayCaster.T_MJR_I1_010_TransformsSensorAxesFromSite": true,
+    "MujocoRayCaster.T_MJR_I1_020_ExcludesVehicleSubtree": true,
+    "MujocoRayCaster.T_MJR_I1_030_ReturnsGeomIdAndSensorNormal": true,
+    "MujocoRayCaster.T_MJR_I1_040_EnforcesMaximumDistance": true,
+    "MujocoRayCaster.T_MJR_I1_050_RejectsInvalidInitializationAndUse": true,
+    "MujocoRayCaster.T_MJR_I1_060_DoesNotModifyModelOrData": true,
+    "MujocoMount.T_MJR_I1_070_BodyMountEqualsSite": true,
+    "MujocoMount.T_MJR_I1_070_BodySubtreeIsTheVehicle": true,
+    "Rangefinder.T_RNG_I1_010_PitchedOverGround": true,
+    "Lidar.T_LID_I1_020_MujocoRoomAndMotionDistortion": true,
+    "DepthCamera.T_DEP_I1_010_MujocoRayGeometry": true,
+    "MujocoForceTorque.HangingToolReadsItsWeight": true,
+    "MujocoForceTorque.RotatedSiteAxes": true,
+    "MujocoForceTorque.ExternalPushAddsToReading": true,
+    "MujocoForceTorque.SiteErrors": true,
+    "MujocoForceTorque.AdapterOnMujocoTareThenPush": true,
+    "MujocoJointSensor.HeldAgainstGravity": true,
+    "MujocoJointSensor.JointErrors": true,
+    "MujocoImageRenderer.T_MJI_I1_010_ManagesMultipleRendererLifetimes": true,
+    "MujocoImageRenderer.T_MJI_I1_020_ProjectsColoursAndImageRows": true,
+    "MujocoImageRenderer.T_MJI_I1_030_DoesNotModifyModelOrData": true,
+    "MujocoImageRenderer.T_MJI_I1_040_GrowsOffscreenBuffer": true,
+    "MujocoImageRenderer.T_MJI_I1_050_BatchUsesEachRequestPose": true,
+    "MujocoImageRenderer.T_MJI_I1_055_SmallDestinationIsUntouched": true,
+    "MujocoImageRenderer.T_MJI_I1_060_RestoresTheHostContextAndHints": true,
+    "MujocoImageRenderer.T_MJI_I1_070_LeavesHostOwnedGlfwRunning": true,
+    "DepthCamera.T_DEP_I1_020_MujocoRayAgainstRender": true,
+    "no_physics_engine": true,
+    "rangefinder_adapter": true,
+    "lidar_adapter": true,
+    "depth_camera_adapter": true,
+    "rgb_camera_adapter": true,
+    "hakoniwa_imu_sensor_adapter": true,
+    "hakoniwa_mag_baro_gps_sensor_adapters": true,
+    "mujoco_rangefinder": true,
+    "mujoco_lidar": true,
+    "mujoco_depth_camera": true,
+    "mujoco_rgb_camera": true
+  }
+}
