@@ -90,24 +90,24 @@ The result of the last run on each platform, by sensor and stage (written by `to
 
 ### linux-x64
 
-- Run: 2026-11-15 11:05 UTC — 218 of 218 tests passed
-- Binary set built 2026-11-15T11:04:49Z from implementation `6319a852`, IMU and GNSS models `2732fc53`, interface (hakoniwa-sensor-adapter) `433de4fe`
+- Run: 2026-11-15 11:27 UTC — 225 of 225 tests passed
+- Binary set built 2026-11-15T11:20:33Z from implementation `6319a852`, IMU and GNSS models `2732fc53`, interface (hakoniwa-sensor-adapter) `433de4fe`
 - Toolchain: c++ (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0
-- Binary set: MANIFEST.json sha256 `d15321cc43df073136764e22d6b26b04b4ebdbab793d77c4a01343561c809cad` (every file checked against it before the run)
+- Binary set: MANIFEST.json sha256 `937a8250d44832430dc494436b362d965d96fb5c05a3a98d5c16696e97ec7726` (every file checked against it before the run)
 
 | Sensor | Sensor model | On a MuJoCo model | External plugin |
 |---|---|---|---|
-| Joint | 15 / 15 | 2 / 2 | — |
-| Force-torque | 15 / 15 | 5 / 5 | — |
-| IMU | 30 / 30 | — | — |
-| Magnetometer | 6 / 6 | — | — |
+| Joint | 18 / 18 | 2 / 2 | — |
+| Force-torque | 20 / 20 | 5 / 5 | — |
+| IMU | 34 / 34 | — | — |
+| Magnetometer | 7 / 7 | — | — |
 | Barometer | 17 / 17 | — | — |
 | GNSS | 16 / 16 | — | — |
 | 2D/3D LiDAR | 12 / 12 | 2 / 2 | — |
 | Rangefinder | 8 / 8 | 2 / 2 | — |
 | Depth camera | 9 / 9 | 4 / 4 | — |
 | RGB camera | 10 / 10 | 1 / 1 | — |
-| Common | 50 / 50 | 17 / 17 | — |
+| Common | 39 / 39 | 16 / 16 | 6 / 6 |
 
 Passed / run. Common: the implementation descriptor, the MuJoCo ray caster and image renderer, and mounting.
 

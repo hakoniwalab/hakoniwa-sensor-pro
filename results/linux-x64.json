@@ -1,12 +1,12 @@
 {
   "platform": "linux-x64",
-  "run": "2026-11-15 11:05 UTC",
-  "total": 218,
-  "passed": 218,
+  "run": "2026-11-15 11:27 UTC",
+  "total": 225,
+  "passed": 225,
   "failed": [],
   "ctest_exit": 0,
   "binaries": {
-    "built": "2026-11-15T11:04:49Z",
+    "built": "2026-11-15T11:20:33Z",
     "sources": {
       "sensors-pro": {
         "repository": "hakoniwalab/hakoniwa-mujoco-sensors-pro",
@@ -28,7 +28,7 @@
       "mujoco_library": "libmujoco.so.3.16.0",
       "mujoco_version": "3.16.0"
     },
-    "manifest_sha256": "d15321cc43df073136764e22d6b26b04b4ebdbab793d77c4a01343561c809cad"
+    "manifest_sha256": "937a8250d44832430dc494436b362d965d96fb5c05a3a98d5c16696e97ec7726"
   },
   "by_sensor": {
     "Rangefinder": {
@@ -73,8 +73,8 @@
     },
     "Force-torque": {
       "model": {
-        "total": 15,
-        "passed": 15
+        "total": 20,
+        "passed": 20
       },
       "mujoco": {
         "total": 5,
@@ -83,8 +83,8 @@
     },
     "Joint": {
       "model": {
-        "total": 15,
-        "passed": 15
+        "total": 18,
+        "passed": 18
       },
       "mujoco": {
         "total": 2,
@@ -93,24 +93,28 @@
     },
     "Common": {
       "model": {
-        "total": 50,
-        "passed": 50
+        "total": 39,
+        "passed": 39
       },
       "mujoco": {
-        "total": 17,
-        "passed": 17
+        "total": 16,
+        "passed": 16
+      },
+      "plugin": {
+        "total": 6,
+        "passed": 6
       }
     },
     "IMU": {
       "model": {
-        "total": 30,
-        "passed": 30
+        "total": 34,
+        "passed": 34
       }
     },
     "Magnetometer": {
       "model": {
-        "total": 6,
-        "passed": 6
+        "total": 7,
+        "passed": 7
       }
     },
     "GNSS": {
@@ -334,7 +338,14 @@
     "MujocoImageRenderer.T_MJI_I1_060_RestoresTheHostContextAndHints": true,
     "MujocoImageRenderer.T_MJI_I1_070_LeavesHostOwnedGlfwRunning": true,
     "DepthCamera.T_DEP_I1_020_MujocoRayAgainstRender": true,
+    "PluginSpec.T_PLG_I1_010_EntryAndFunctionTable": true,
+    "PluginSpec.T_PLG_I1_020_CreateFailuresAreReportedAndTerminated": true,
+    "PluginSpec.T_PLG_I1_030_LifecycleRestartsAndResetReplaysTheSameInputs": true,
+    "PluginSpec.T_PLG_I1_040_StepUsesPostPhysicsTime": true,
+    "PluginSpec.T_PLG_I1_050_RegisterServicesWithoutHakoniwaFailsCleanly": true,
+    "PluginSpec.T_PLG_I1_060_MountedRangefinderStepsInKnownGeometry": true,
     "no_physics_engine": true,
+    "no_build_paths": true,
     "rangefinder_adapter": true,
     "lidar_adapter": true,
     "depth_camera_adapter": true,
