@@ -1,0 +1,215 @@
+{
+  "description": "Files copied from the private sources by tools/sync.py. 'to' is relative to this repository. A trailing / copies a directory tree. include/ holds the public headers of the implementation (declarations only), copied from the implementation's own public header folders.",
+  "copy": [
+    {
+      "source": "sensors-pro",
+      "from": "MUJOCO_VERSION.txt",
+      "to": "MUJOCO_VERSION.txt"
+    },
+    {
+      "source": "sensors-pro",
+      "from": "include/hakoniwa/mujoco_sensors/",
+      "to": "include/hakoniwa/mujoco_sensors/"
+    },
+    {
+      "source": "sensors-pro",
+      "from": "config/depth_camera/",
+      "to": "tests/sensors/config/depth_camera/"
+    },
+    {
+      "source": "sensors-pro",
+      "from": "config/force_torque/",
+      "to": "tests/sensors/config/force_torque/"
+    },
+    {
+      "source": "sensors-pro",
+      "from": "config/joint/",
+      "to": "tests/sensors/config/joint/"
+    },
+    {
+      "source": "sensors-pro",
+      "from": "config/lidar/",
+      "to": "tests/sensors/config/lidar/"
+    },
+    {
+      "source": "sensors-pro",
+      "from": "config/rangefinder/",
+      "to": "tests/sensors/config/rangefinder/"
+    },
+    {
+      "source": "sensors-pro",
+      "from": "test/test_rangefinder.cpp",
+      "to": "tests/sensors/test/test_rangefinder.cpp"
+    },
+    {
+      "source": "sensors-pro",
+      "from": "test/test_lidar.cpp",
+      "to": "tests/sensors/test/test_lidar.cpp"
+    },
+    {
+      "source": "sensors-pro",
+      "from": "test/test_depth_camera.cpp",
+      "to": "tests/sensors/test/test_depth_camera.cpp"
+    },
+    {
+      "source": "sensors-pro",
+      "from": "test/test_rgb_camera.cpp",
+      "to": "tests/sensors/test/test_rgb_camera.cpp"
+    },
+    {
+      "source": "sensors-pro",
+      "from": "test/test_force_torque.cpp",
+      "to": "tests/sensors/test/test_force_torque.cpp"
+    },
+    {
+      "source": "sensors-pro",
+      "from": "test/test_joint_sensor.cpp",
+      "to": "tests/sensors/test/test_joint_sensor.cpp"
+    },
+    {
+      "source": "sensors-pro",
+      "from": "test/test_implementation_descriptor.cpp",
+      "to": "tests/sensors/test/test_implementation_descriptor.cpp"
+    },
+    {
+      "source": "sensors-pro",
+      "from": "test/rangefinder_adapter_test.cpp",
+      "to": "tests/sensors/test/rangefinder_adapter_test.cpp"
+    },
+    {
+      "source": "sensors-pro",
+      "from": "test/lidar_adapter_test.cpp",
+      "to": "tests/sensors/test/lidar_adapter_test.cpp"
+    },
+    {
+      "source": "sensors-pro",
+      "from": "test/depth_camera_adapter_test.cpp",
+      "to": "tests/sensors/test/depth_camera_adapter_test.cpp"
+    },
+    {
+      "source": "sensors-pro",
+      "from": "test/rgb_camera_adapter_test.cpp",
+      "to": "tests/sensors/test/rgb_camera_adapter_test.cpp"
+    },
+    {
+      "source": "sensors-pro",
+      "from": "test/test_mujoco_ray_caster.cpp",
+      "to": "tests/sensors/test/test_mujoco_ray_caster.cpp"
+    },
+    {
+      "source": "sensors-pro",
+      "from": "test/test_mujoco_mount.cpp",
+      "to": "tests/sensors/test/test_mujoco_mount.cpp"
+    },
+    {
+      "source": "sensors-pro",
+      "from": "test/test_mujoco_rangefinder.cpp",
+      "to": "tests/sensors/test/test_mujoco_rangefinder.cpp"
+    },
+    {
+      "source": "sensors-pro",
+      "from": "test/test_mujoco_lidar.cpp",
+      "to": "tests/sensors/test/test_mujoco_lidar.cpp"
+    },
+    {
+      "source": "sensors-pro",
+      "from": "test/test_mujoco_depth_camera.cpp",
+      "to": "tests/sensors/test/test_mujoco_depth_camera.cpp"
+    },
+    {
+      "source": "sensors-pro",
+      "from": "test/test_mujoco_force_torque.cpp",
+      "to": "tests/sensors/test/test_mujoco_force_torque.cpp"
+    },
+    {
+      "source": "sensors-pro",
+      "from": "test/test_mujoco_joint_sensor.cpp",
+      "to": "tests/sensors/test/test_mujoco_joint_sensor.cpp"
+    },
+    {
+      "source": "sensors-pro",
+      "from": "test/mujoco_rangefinder_test.cpp",
+      "to": "tests/sensors/test/mujoco_rangefinder_test.cpp"
+    },
+    {
+      "source": "sensors-pro",
+      "from": "test/mujoco_lidar_test.cpp",
+      "to": "tests/sensors/test/mujoco_lidar_test.cpp"
+    },
+    {
+      "source": "sensors-pro",
+      "from": "test/mujoco_depth_camera_test.cpp",
+      "to": "tests/sensors/test/mujoco_depth_camera_test.cpp"
+    },
+    {
+      "source": "sensors-pro",
+      "from": "test/test_mujoco_image_renderer.cpp",
+      "to": "tests/sensors/test/test_mujoco_image_renderer.cpp"
+    },
+    {
+      "source": "sensors-pro",
+      "from": "test/test_mujoco_depth_render.cpp",
+      "to": "tests/sensors/test/test_mujoco_depth_render.cpp"
+    },
+    {
+      "source": "sensors-pro",
+      "from": "test/mujoco_rgb_camera_test.cpp",
+      "to": "tests/sensors/test/mujoco_rgb_camera_test.cpp"
+    },
+    {
+      "source": "drone-pro",
+      "from": "sensors/include/hakoniwa/imu_gnss_sensors/",
+      "to": "include/hakoniwa/imu_gnss_sensors/"
+    },
+    {
+      "source": "drone-pro",
+      "from": "src/test/test_sensor_models.cpp",
+      "to": "tests/imu-gnss/src/test/test_sensor_models.cpp"
+    },
+    {
+      "source": "drone-pro",
+      "from": "src/test/data/px4_board_rotation_cases.json",
+      "to": "tests/imu-gnss/src/test/data/px4_board_rotation_cases.json"
+    },
+    {
+      "source": "drone-pro",
+      "from": "src/test/data/ardupilot_board_rotation_cases.json",
+      "to": "tests/imu-gnss/src/test/data/ardupilot_board_rotation_cases.json"
+    },
+    {
+      "source": "drone-pro",
+      "from": "sensors/test/test_hakoniwa_imu_sensor_adapter.cpp",
+      "to": "tests/imu-gnss/sensors/test/test_hakoniwa_imu_sensor_adapter.cpp"
+    },
+    {
+      "source": "drone-pro",
+      "from": "sensors/test/test_hakoniwa_mag_baro_gps_sensor_adapters.cpp",
+      "to": "tests/imu-gnss/sensors/test/test_hakoniwa_mag_baro_gps_sensor_adapters.cpp"
+    },
+    {
+      "source": "drone-pro",
+      "from": "sensors/config/imu-full.json",
+      "to": "tests/imu-gnss/sensors/config/imu-full.json"
+    },
+    {
+      "source": "drone-pro",
+      "from": "sensors/config/imu-mounted.json",
+      "to": "tests/imu-gnss/sensors/config/imu-mounted.json"
+    },
+    {
+      "source": "drone-pro",
+      "from": "sensors/config/imu-small-range.json",
+      "to": "tests/imu-gnss/sensors/config/imu-small-range.json"
+    },
+    {
+      "source": "drone-pro",
+      "from": "sensors/config/mag-baro-gps-full.json",
+      "to": "tests/imu-gnss/sensors/config/mag-baro-gps-full.json"
+    },
+    {
+      "source": "drone-pro",
+      "from": "sensors/config/mag-baro-gps-mounted.json",
+      "to": "tests/imu-gnss/sensors/config/mag-baro-gps-mounted.json"
+    }
+  ]
+}

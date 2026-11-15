@@ -1,0 +1,9 @@
+SPDX-License-Identifier: LicenseRef-hakoniwalab-NC
+
+The binary files in the release packages, and the header files in include/, use a custom
+non-commercial license (the same as hakoniwa-drone-core). See LICENSE.md (English) and
+LICENSE-ja.md (Japanese, which prevails).
+
+The test sources, tools and documents of this repository: MIT. See LICENSE-tests.
+
+Third-party components in the binary files: see THIRD_PARTY_NOTICES.md.

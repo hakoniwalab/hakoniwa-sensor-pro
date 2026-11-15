@@ -1,0 +1,140 @@
+{
+  "description": "How the requirements that no test in this repository names are checked. 'internal': by Hakoniwa Lab's internal tests (test IDs given), whose publication is in preparation. 'per-sensor': by each sensor's tests, as the test design states. 'review': by code review, recorded in docs/reviews.md. 'retired': no longer a requirement. 'none': no test yet. 'tested' with 'tests': the tests that check it. Used by tools/traceability.py.",
+  "notes": {
+    "RIS-COM-050": {
+      "status": "internal",
+      "note": "T-COM-U2-010 (common helpers; the test uses internal headers)"
+    },
+    "RIS-COM-060": {
+      "status": "internal",
+      "note": "T-COM-U1-010, T-COM-U2-020 (common helpers; the test uses internal headers)"
+    },
+    "RIS-COM-070": {
+      "status": "internal",
+      "note": "T-COM-U2-020 (common helpers; the test uses internal headers)"
+    },
+    "RIS-COM-080": {
+      "status": "internal",
+      "note": "T-COM-U2-030 (common helpers; the test uses internal headers)"
+    },
+    "RIS-COM-090": {
+      "status": "internal",
+      "note": "T-COM-U1-020 (common helpers; the test uses internal headers)"
+    },
+    "RIS-COM-100": {
+      "status": "internal",
+      "note": "T-COM-U2-040 (common helpers; the test uses internal headers)"
+    },
+    "RIS-COM-110": {
+      "status": "internal",
+      "note": "T-COM-U2-050 (common helpers; the test uses internal headers)"
+    },
+    "RIS-COM-130": {
+      "status": "internal",
+      "note": "T-COM-U1-040, T-COM-U3-020 (common helpers; the test uses internal headers)"
+    },
+    "RIS-COM-150": {
+      "status": "internal",
+      "note": "T-COM-U1-060 (common helpers; the test uses internal headers)"
+    },
+    "RIS-COM-170": {
+      "status": "internal",
+      "note": "T-COM-U3-020 (common helpers; the test uses internal headers)"
+    },
+    "RIS-COM-180": {
+      "status": "internal",
+      "note": "T-COM-U3-030 (common helpers; the test uses internal headers)"
+    },
+    "RIS-COM-190": {
+      "status": "internal",
+      "note": "T-COM-U2-060 (common helpers; the test uses internal headers)"
+    },
+    "RIS-COM-200": {
+      "status": "internal",
+      "note": "T-COM-U1-080 (common helpers; the test uses internal headers)"
+    },
+    "SEN-COM-460": {
+      "status": "internal",
+      "note": "T-VIB-F-010 to 070, T-VIB-U2-060, 070 (IMU filter tests with the vibration generator)"
+    },
+    "SEN-COM-462": {
+      "status": "internal",
+      "note": "T-VIB-F-010 to 070, T-VIB-U2-060, 070 (IMU filter tests with the vibration generator)"
+    },
+    "SEN-COM-464": {
+      "status": "internal",
+      "note": "T-VIB-F-010 to 070, T-VIB-U2-060, 070 (IMU filter tests with the vibration generator)"
+    },
+    "SEN-COM-468": {
+      "status": "internal",
+      "note": "T-VIB-F-010 to 070, T-VIB-U2-060, 070 (IMU filter tests with the vibration generator)"
+    },
+    "SEN-COM-470": {
+      "status": "internal",
+      "note": "T-VIB-F-010 to 070, T-VIB-U2-060, 070 (IMU filter tests with the vibration generator)"
+    },
+    "SEN-COM-380": {
+      "status": "internal",
+      "note": "T-COM-I1-070 (on the full vehicle model)"
+    },
+    "SEN-COM-130": {
+      "status": "per-sensor",
+      "note": "the U2 tests of each sensor (test design)"
+    },
+    "SEN-COM-180": {
+      "status": "per-sensor",
+      "note": "the U2 tests of each sensor (test design)"
+    },
+    "SEN-COM-260": {
+      "status": "per-sensor",
+      "note": "the U2 tests of each sensor (test design)"
+    },
+    "SEN-COM-211": {
+      "status": "per-sensor",
+      "note": "the U3 configuration tests of each sensor (test design)"
+    },
+    "SEN-COM-212": {
+      "status": "per-sensor",
+      "note": "the U3 configuration tests of each sensor (test design)"
+    },
+    "SEN-COM-213": {
+      "status": "per-sensor",
+      "note": "the U3 configuration tests of each sensor (test design)"
+    },
+    "SEN-COM-214": {
+      "status": "per-sensor",
+      "note": "the U3 configuration tests of each sensor (test design)"
+    },
+    "SEN-COM-218": {
+      "status": "per-sensor",
+      "note": "the U3 configuration tests of each sensor (test design)"
+    },
+    "SEN-COM-170": {
+      "status": "retired",
+      "note": "replaced by SEN-COM-176"
+    },
+    "SEN-GYR-200": {
+      "status": "tested",
+      "note": "the common rounding function test (test design)",
+      "tests": [
+        "SensorModels.T_COM_U1_140_ResolutionRounding"
+      ]
+    },
+    "SEN-COM-010": {
+      "status": "review",
+      "note": "R-02, see docs/reviews.md"
+    },
+    "SEN-GYR-120": {
+      "status": "review",
+      "note": "R-03, see docs/reviews.md"
+    },
+    "SEN-ACC-220": {
+      "status": "review",
+      "note": "R-03, see docs/reviews.md"
+    },
+    "SEN-MAG-220": {
+      "status": "review",
+      "note": "R-03, see docs/reviews.md"
+    }
+  }
+}

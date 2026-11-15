@@ -1,0 +1,12 @@
+{
+  "type": "depth_camera",
+  "update_rate": 25,
+  "image": { "width": 160, "height": 120 },
+  "horizontal_fov": 1.51843644923507,
+  "depth_type": "planar",
+  "range": { "min": 0.3, "max": 10.0, "resolution": 0.001 },
+  "accuracy": [
+    { "range": { "min": 0.3, "max": 10.0 }, "percent": 2.0 }
+  ],
+  "no_return": "inf"
+}

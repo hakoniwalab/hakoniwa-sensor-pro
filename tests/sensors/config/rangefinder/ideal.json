@@ -1,0 +1,6 @@
+{
+  "type": "rangefinder",
+  "update_rate": 10,
+  "radiation_type": "laser",
+  "range": { "min": 0.1, "max": 10.0 }
+}

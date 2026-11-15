@@ -1,0 +1,11 @@
+[
+  {"name": "yaw_90", "orientation": [0, 0, 90], "rotation": 2, "offset": [0, 0, 0]},
+  {"name": "yaw_70", "orientation": [0, 0, 70], "rotation": 2, "offset": [0, 0, -20]},
+  {
+    "name": "rotation_38_excluded",
+    "orientation": [90, 68, 293],
+    "rotation": 29,
+    "offset": [-22, 0, 23]
+  },
+  {"name": "not_representable", "orientation": [-165, -75, -150], "error": true}
+]

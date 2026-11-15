@@ -1,0 +1,8 @@
+[
+  {"name": "identity", "orientation": [0, 0, 0], "rotation": 0},
+  {"name": "yaw_90", "orientation": [0, 0, 90], "rotation": 2},
+  {"name": "roll_45", "orientation": [45, 0, 0], "rotation": 42},
+  {"name": "roll_315", "orientation": [315, 0, 0], "rotation": 43},
+  {"name": "rotation_38_excluded", "orientation": [90, 68, 293], "custom": true},
+  {"name": "arbitrary_custom", "orientation": [12.5, -7.25, 31], "custom": true}
+]

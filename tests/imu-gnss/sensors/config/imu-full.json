@@ -1,0 +1,29 @@
+{
+  "components": {
+    "sensors": {
+      "imu": {"mount": {"positionM": [0, 0, 0], "orientationDeg": {"roll": 0, "pitch": 0, "yaw": 0}}},
+      "gyro": {
+        "updatePeriodMsec": 4,
+        "delayMsec": 2,
+        "noise": 0.0008726646,
+        "sensitivity": {"scaleErrorPct": [0.5, -0.3, 1.0], "crossAxisPct": [[0, 1.0, 0], [0, 0, -0.5], [0.2, 0, 0]]},
+        "zeroRateOffset": {"randomStdDegPerSec": 1.0},
+        "drift": {"mode": "gauss-markov", "stddevDegPerSec": 0.005, "correlationTimeSec": 0.1},
+        "resolutionDegPerSec": 0.061,
+        "range": {"fullScaleDegPerSec": 2000},
+        "filter": {"type": "chebyshev2", "order": 6, "stopbandHz": 125, "stopbandAttenuationDb": 40}
+      },
+      "acc": {
+        "updatePeriodMsec": 4,
+        "delayMsec": 1,
+        "noise": [0.03, 0.03, 0.04],
+        "sensitivity": {"scaleErrorPct": [0.2, 0.4, -0.1]},
+        "zeroGOffset": {"randomStdMg": 20},
+        "drift": {"mode": "gauss-markov", "stddevMg": 5, "correlationTimeSec": 0.1},
+        "resolutionMps2": 0.0024,
+        "range": {"fullScaleG": 16},
+        "filter": {"type": "chebyshev2", "order": 6, "stopbandHz": 125, "stopbandAttenuationDb": 40}
+      }
+    }
+  }
+}

@@ -1,0 +1,50 @@
+name: consistency
+
+# Without binaries: the copied files list, the tools, and the generated README / traceability are
+# consistent with the recorded results and the public specification.
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  consistency:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: hakoniwa-sensor-pro
+
+      - name: Public repositories at the pinned revisions
+        run: |
+          rev() { python3 -c "import json,sys;print(json.load(open('hakoniwa-sensor-pro/config/sources.json'))['sources'][sys.argv[1]][sys.argv[2]])" "$1" "$2"; }
+          git clone -q https://github.com/hakoniwalab/hakoniwa-sensor-adapter.git
+          git clone -q https://github.com/toppers/hakoniwa-drone-core.git
+          git -C hakoniwa-sensor-adapter cat-file -e "$(rev sensor-adapter specification_revision)^{commit}"
+          git -C hakoniwa-drone-core cat-file -e "$(rev drone-core revision)^{commit}"
+
+      - name: Tools compile
+        working-directory: hakoniwa-sensor-pro
+        run: python3 -m py_compile tools/*.py tests/binary/*.py
+
+      - name: Generated README and traceability match results/*.json
+        working-directory: hakoniwa-sensor-pro
+        run: python3 tools/regenerate.py --check
+
+      - name: Every recorded result passed
+        working-directory: hakoniwa-sensor-pro
+        run: |
+          python3 - <<'EOF'
+          import json, pathlib, sys
+          bad = []
+          for p in sorted(pathlib.Path("results").glob("*.json")):
+              r = json.loads(p.read_text())
+              ok = r["passed"] == r["total"] and r["total"] > 0 and not r["failed"] and r.get("ctest_exit") == 0
+              print(f"{p.name}: {r['passed']} of {r['total']} passed, ctest exit {r.get('ctest_exit')}")
+              if not ok:
+                  bad.append(p.name)
+          sys.exit(1 if bad else 0)
+          EOF

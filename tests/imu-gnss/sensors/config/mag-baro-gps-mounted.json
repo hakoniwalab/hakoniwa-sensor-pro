@@ -1,0 +1,9 @@
+{
+  "components": {
+    "sensors": {
+      "imu": {"mount": {"positionM": [0, 0, 0], "orientationDeg": {"roll": 0, "pitch": 0, "yaw": 30}}},
+      "baro": {"mount": {"positionM": [0, 0, -0.1]}},
+      "gps": {"mount": {"positionM": [0.2, 0, -0.1]}}
+    }
+  }
+}

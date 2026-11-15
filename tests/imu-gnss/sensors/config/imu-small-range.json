@@ -1,0 +1,8 @@
+{
+  "components": {
+    "sensors": {
+      "gyro": {"range": {"fullScaleDegPerSec": 250}},
+      "acc": {"range": {"fullScaleG": 2}}
+    }
+  }
+}
