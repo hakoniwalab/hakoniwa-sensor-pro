@@ -1,6 +1,6 @@
 # hakoniwa-sensor-pro
 
-[![consistency](https://github.com/hakoniwalab/hakoniwa-sensor-pro/actions/workflows/consistency.yml/badge.svg)](https://github.com/hakoniwalab/hakoniwa-sensor-pro/actions/workflows/consistency.yml) [![release-tests](https://github.com/hakoniwalab/hakoniwa-sensor-pro/actions/workflows/release-tests.yml/badge.svg)](https://github.com/hakoniwalab/hakoniwa-sensor-pro/actions/workflows/release-tests.yml)
+[![consistency](https://github.com/hakoniwalab/hakoniwa-sensor-pro/actions/workflows/consistency.yml/badge.svg?branch=main)](https://github.com/hakoniwalab/hakoniwa-sensor-pro/actions/workflows/consistency.yml) [![release-tests](https://github.com/hakoniwalab/hakoniwa-sensor-pro/actions/workflows/release-tests.yml/badge.svg?branch=main)](https://github.com/hakoniwalab/hakoniwa-sensor-pro/actions/workflows/release-tests.yml)
 
 Hakoniwa Lab's sensor implementation for simulation, distributed as binaries, with the tests that check it against its specification.
 
