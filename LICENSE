@@ -1,7 +1,9 @@
-The binary files in the release archives: LicenseRef-hakoniwalab-sensor-pro-evaluation
-(free for evaluation, personal use, and academic research and education; a commercial
-license is needed for anything else). See LICENSE.md (English) and LICENSE-ja.md (Japanese).
+SPDX-License-Identifier: LicenseRef-hakoniwalab-NC
 
-The test sources, tools and documents in this repository: MIT. See LICENSE-tests.
+The binary files in the release packages, and the header files in include/, use a custom
+non-commercial license (the same as hakoniwa-drone-core). See LICENSE.md (English) and
+LICENSE-ja.md (Japanese, which prevails).
+
+The test sources, tools and documents of this repository: MIT. See LICENSE-tests.
 
 Third-party components in the binary files: see THIRD_PARTY_NOTICES.md.

@@ -100,7 +100,7 @@ def verify_manifest(dist):
     """Every file of the binary set matches MANIFEST.json, and no file is missing or extra."""
     manifest = json.loads((dist / "MANIFEST.json").read_text())
     listed = manifest["files"]
-    present = {str(p.relative_to(dist)) for p in dist.rglob("*") if p.is_file()} - {"MANIFEST.json", "LICENSE", "LICENSE.md", "LICENSE-ja.md", "THIRD_PARTY_NOTICES.md"}
+    present = {str(p.relative_to(dist)) for p in dist.rglob("*") if p.is_file()} - {"MANIFEST.json", "LICENSE", "LICENSE.md", "LICENSE-ja.md", "LICENSE-tests", "THIRD_PARTY_NOTICES.md"}
     errors = [f"missing: {f}" for f in sorted(set(listed) - present)]
     errors += [f"not in MANIFEST.json: {f}" for f in sorted(present - set(listed))]
     for f in sorted(set(listed) & present):

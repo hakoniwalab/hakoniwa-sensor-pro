@@ -3,8 +3,8 @@ MIT License
 Copyright (c) 2026 Hakoniwa Lab LLC
 
 This license applies to the test sources, tools, configuration files and documents in this
-repository. It does not apply to the binary files in the release archives (see LICENSE.md),
-or to files copied from third parties, which keep their own licenses (see THIRD_PARTY_NOTICES.md).
+repository. It does not apply to the binary files in the release archives or to the header files
+in include/ (see LICENSE.md), or to files copied from third parties, which keep their own licenses (see THIRD_PARTY_NOTICES.md).
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

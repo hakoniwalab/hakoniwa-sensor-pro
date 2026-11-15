@@ -40,7 +40,7 @@ Each [release](https://github.com/hakoniwalab/hakoniwa-sensor-pro/releases) has 
 | `lib/` | `libhakoniwa_mujoco_sensors_adapters.a` (joint, force-torque, LiDAR, rangefinder, depth and RGB cameras; the `hakoniwa` implementation entry), `libhakoniwa_imu_gnss_sensor_adapters.a` and `libhakoniwa_imu_gnss_sensor_models.a` (IMU, magnetometer, barometer, GNSS), the MuJoCo parts (`libhakoniwa_mujoco_sensors_mujoco.a`, the ray caster; `libhakoniwa_mujoco_sensors_renderer.a`, the image renderer) and the external sensor plugin (`hakoniwa_mujoco_sensors_plugin.so`) |
 | `include/` | the public headers of the implementation |
 | `MANIFEST.json` | the source revisions, the toolchain and the SHA-256 of every file |
-| `LICENSE`, `LICENSE.md`, `LICENSE-ja.md`, `THIRD_PARTY_NOTICES.md` | the license of the binaries and the third-party notices |
+| `LICENSE`, `LICENSE.md`, `LICENSE-ja.md`, `LICENSE-tests`, `THIRD_PARTY_NOTICES.md` | the license of the binaries and the third-party notices |
 
 ### Supported environments
 
@@ -57,7 +57,7 @@ The plugin carries no library search path: a host that loads it supplies the Hak
 
 ## License
 
-- **The binaries** (release archives): free for evaluation (including technical evaluation and proof of concept inside companies), personal use, and academic research and education. Building them into a product or service, commercial operation, work for third parties and redistribution need a commercial license from Hakoniwa Lab LLC (tmori@hakoniwa-lab.net). See [LICENSE.md](LICENSE.md) (English) and [LICENSE-ja.md](LICENSE-ja.md) (Japanese, which prevails).
+- **The binaries** (release archives) **and the headers in `include/`**: free for personal use, academic research and education, non-commercial research and development, non-profit activities and, under conditions, demonstrations at exhibitions; commercial use needs a commercial license (tmori@hakoniwa-lab.net). The same license as hakoniwa-drone-core. See [LICENSE.md](LICENSE.md) (English) and [LICENSE-ja.md](LICENSE-ja.md) (Japanese, which prevails).
 - **The test sources, tools and documents** in this repository: MIT, see [LICENSE-tests](LICENSE-tests).
 - **Third-party components** in the binaries: see [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
 

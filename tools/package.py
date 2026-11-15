@@ -2,7 +2,7 @@
 """Make the release archive of a binary set: hakoniwa-sensor-pro-<version>-<platform>.zip and its .sha256.
 
 The archive holds one top directory with lib/, include/, MANIFEST.json and the license files
-(LICENSE, LICENSE.md, LICENSE-ja.md, THIRD_PARTY_NOTICES.md).
+(LICENSE, LICENSE.md, LICENSE-ja.md, LICENSE-tests, THIRD_PARTY_NOTICES.md).
 
     python3 tools/package.py --version 0.1.0          # dist/<this platform>
     python3 tools/package.py --version 0.1.0 --dist dist/macos-arm64
@@ -22,7 +22,7 @@ platform_name = import_module("build-binaries").platform_name
 verify_manifest = import_module("run-tests").verify_manifest
 
 
-LICENSE_FILES = ["LICENSE", "LICENSE.md", "LICENSE-ja.md", "THIRD_PARTY_NOTICES.md"]
+LICENSE_FILES = ["LICENSE", "LICENSE.md", "LICENSE-ja.md", "LICENSE-tests", "THIRD_PARTY_NOTICES.md"]
 
 
 def main():
