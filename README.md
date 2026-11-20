@@ -90,15 +90,15 @@ The result of the last run on each platform, by sensor and stage (written by `to
 
 ### linux-x64
 
-- Run: 2026-11-15 11:27 UTC — 225 of 225 tests passed
-- Binary set built 2026-11-15T11:20:33Z from implementation `6319a852`, IMU and GNSS models `2732fc53`, interface (hakoniwa-sensor-adapter) `433de4fe`
+- Run: 2026-11-20 23:31 UTC — 275 of 275 tests passed
+- Binary set built 2026-11-20T23:17:35Z from implementation `cd417069`, IMU and GNSS models `2732fc53`, interface (hakoniwa-sensor-adapter) `a68186d7`
 - Toolchain: c++ (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0
-- Binary set: MANIFEST.json sha256 `937a8250d44832430dc494436b362d965d96fb5c05a3a98d5c16696e97ec7726` (every file checked against it before the run)
+- Binary set: MANIFEST.json sha256 `99454654cf96b727074359bc3bb18c2ed0ed6318b81ba9ef4c9ebf598fdd5cb0` (every file checked against it before the run)
 
 | Sensor | Sensor model | On a MuJoCo model | External plugin |
 |---|---|---|---|
 | Joint | 18 / 18 | 2 / 2 | — |
-| Force-torque | 20 / 20 | 5 / 5 | — |
+| Force-torque | 70 / 70 | 5 / 5 | — |
 | IMU | 34 / 34 | — | — |
 | Magnetometer | 7 / 7 | — | — |
 | Barometer | 17 / 17 | — | — |
@@ -149,8 +149,8 @@ Every requirement of the specification, how it is checked, and the result on eac
 | [LiDAR](docs/traceability.md#lidar) | 14 | 14 | 14 | — |
 | [Depth camera](docs/traceability.md#depth-camera) | 8 | 8 | 8 | — |
 | [RGB camera](docs/traceability.md#rgb-camera) | 9 | 9 | 9 | — |
-| [Force-torque sensor](docs/traceability.md#force-torque-sensor) | 33 | 33 | 31 | — |
-| [Force-torque vibration (host model)](docs/traceability.md#force-torque-vibration-host-model) | 42 | 42 | 0 | — |
+| [Force-torque sensor](docs/traceability.md#force-torque-sensor) | 33 | 33 | 33 | — |
+| [Force-torque vibration (host model)](docs/traceability.md#force-torque-vibration-host-model) | 42 | 42 | 42 | — |
 | [Joint sensor](docs/traceability.md#joint-sensor) | 27 | 27 | 27 | — |
 | [IMU, magnetometer, barometer and GNSS: common](docs/traceability.md#imu-magnetometer-barometer-and-gnss:-common) | 74 | 29 | 29 | retired 1, host requirement 29, checked by each sensor's tests 8, Hakoniwa Lab internal test 6, code review 1 |
 | [Gyroscope](docs/traceability.md#gyroscope) | 25 | 20 | 20 | host requirement 4, code review 1 |
