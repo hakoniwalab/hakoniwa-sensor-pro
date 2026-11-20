@@ -113,15 +113,15 @@ Passed / run. Common: the implementation descriptor, the MuJoCo ray caster and i
 
 ### macos-arm64
 
-- Run: 2026-11-20 22:33 UTC — 270 of 270 tests passed
-- Binary set built 2026-11-20T22:31:38Z from implementation `29dc1e59`, IMU and GNSS models `2732fc53`, interface (hakoniwa-sensor-adapter) `a68186d7`
+- Run: 2026-11-20 22:43 UTC — 275 of 275 tests passed
+- Binary set built 2026-11-20T22:42:58Z from implementation `cd417069`, IMU and GNSS models `2732fc53`, interface (hakoniwa-sensor-adapter) `a68186d7`
 - Toolchain: Apple clang version 21.0.0 (clang-2100.4.1.1)
-- Binary set: MANIFEST.json sha256 `5664e42f5f2ea97664057773917b4760748907bdcc53a3cfc461be57e6c6567c` (every file checked against it before the run)
+- Binary set: MANIFEST.json sha256 `6f35ede2250b44954964815583e55b35e5447644cf9e77c14067fc5c40bd6c2e` (every file checked against it before the run)
 
 | Sensor | Sensor model | On a MuJoCo model | External plugin |
 |---|---|---|---|
 | Joint | 18 / 18 | 2 / 2 | — |
-| Force-torque | 65 / 65 | 5 / 5 | — |
+| Force-torque | 70 / 70 | 5 / 5 | — |
 | IMU | 34 / 34 | — | — |
 | Magnetometer | 7 / 7 | — | — |
 | Barometer | 17 / 17 | — | — |
@@ -150,7 +150,7 @@ Every requirement of the specification, how it is checked, and the result on eac
 | [Depth camera](docs/traceability.md#depth-camera) | 8 | 8 | 8 | — |
 | [RGB camera](docs/traceability.md#rgb-camera) | 9 | 9 | 9 | — |
 | [Force-torque sensor](docs/traceability.md#force-torque-sensor) | 33 | 33 | 31 | — |
-| [Force-torque vibration (host model)](docs/traceability.md#force-torque-vibration-host-model) | 42 | 33 | 0 | no test 9 |
+| [Force-torque vibration (host model)](docs/traceability.md#force-torque-vibration-host-model) | 42 | 42 | 0 | — |
 | [Joint sensor](docs/traceability.md#joint-sensor) | 27 | 27 | 27 | — |
 | [IMU, magnetometer, barometer and GNSS: common](docs/traceability.md#imu-magnetometer-barometer-and-gnss:-common) | 74 | 29 | 29 | retired 1, host requirement 29, checked by each sensor's tests 8, Hakoniwa Lab internal test 6, code review 1 |
 | [Gyroscope](docs/traceability.md#gyroscope) | 25 | 20 | 20 | host requirement 4, code review 1 |

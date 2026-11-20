@@ -12,6 +12,7 @@
 #include <utility>
 #include <vector>
 
+#include "hakoniwa/mujoco_sensors/force_torque_sensor_adapter.hpp"
 #include "hakoniwa/mujoco_sensors/force_torque_vibration.hpp"
 
 namespace sa = hakoniwa::sensor_adapter;
@@ -257,7 +258,7 @@ TEST(ForceTorqueVibration, StructuralModeStatisticsAndActivity)
     EXPECT_NEAR(stddev(m, 2000), 5.0, 0.15);
 }
 
-// T-FTV-U4-010 [FTV-310/320] Broadband converts one-sided density to per-step sigma and vanishes at rest
+// T-FTV-U4-010 [FTV-310] [FTV-320] Broadband converts one-sided density to per-step sigma and vanishes at rest
 TEST(ForceTorqueVibration, BroadbandDensityAndZeroActivity)
 {
     const std::string body = R"({"type":"force_torque_vibration","f_ref_hz":50,
@@ -309,7 +310,7 @@ TEST(ForceTorqueVibration, ResetReproducesSequenceFromCreation)
         for (int i = 0; i < 6; ++i) EXPECT_DOUBLE_EQ(axis(first[k], i), axis(again[k], i));
 }
 
-// T-FTV-U5-010 [FTV-610/620] Seeds reproduce sequences, differ across seeds, and streams are separate
+// T-FTV-U5-010 [FTV-610] [FTV-620] Seeds reproduce sequences, differ across seeds, and streams are separate
 TEST(ForceTorqueVibration, SeedsAndComponentStreamsAreIndependent)
 {
     const std::string order_only = R"({"type":"force_torque_vibration","joints":[{"name":"j",
@@ -334,7 +335,7 @@ TEST(ForceTorqueVibration, SeedsAndComponentStreamsAreIndependent)
     EXPECT_TRUE(seed_differs);
 }
 
-// T-FTV-U6-010 [FTV-450/510] Every listed malformed configuration is rejected with a message
+// T-FTV-U6-010 [FTV-450] [FTV-510] Every listed malformed configuration is rejected with a message
 TEST(ForceTorqueVibration, ConfigurationErrorsAreRejected)
 {
     const std::vector<std::pair<std::string, std::string>> cases = {
@@ -395,4 +396,203 @@ TEST(ForceTorqueVibration, HakoniwaHostModelEntryExists)
     std::string error;
     auto model = implementation->create_force_torque_vibration(setup, error);
     EXPECT_TRUE(model) << error;
+}
+
+namespace {
+
+// The order phase theta of a single order-1 component on fx: with a constant velocity the motor phase grows by c per step,
+// so y_k = A sin(c k + theta'), theta' = theta plus a fixed offset of the step convention. Over a whole number of periods
+// the projections give A cos(theta') and A sin(theta').
+struct PhaseFit {
+    double amplitude;
+    double phase;
+};
+
+PhaseFit fit_phase(const std::vector<double>& y, double c, std::size_t first)
+{
+    double s = 0.0, co = 0.0;
+    for (std::size_t k = 0; k < y.size(); ++k) {
+        const double a = c * static_cast<double>(first + k);
+        s += y[k] * std::sin(a);
+        co += y[k] * std::cos(a);
+    }
+    const double n = static_cast<double>(y.size());
+    return {std::hypot(2.0 * s / n, 2.0 * co / n), std::atan2(2.0 * co / n, 2.0 * s / n)};
+}
+
+std::string one_order(const std::string& name, const std::string& joints)
+{
+    return write_config(name, R"({"type":"force_torque_vibration","f_ref_hz":50,"joints":[)" + joints + "]}");
+}
+
+const char* kJointA = R"({"name":"a","gear_ratio":10,"deadband_hz":0.01,"orders":[{"order":1,"amplitude":{"fx":1}}]})";
+
+}  // namespace
+
+// T-FTV-U1-070 [FTV-010] A model is created from the setup fields; a missing or unreadable file fails with a message
+TEST(ForceTorqueVibration, CreationFromSetupFieldsAndFileErrors)
+{
+    auto model = make(one_order("create", kJointA), 3, kStepNs);
+    ASSERT_TRUE(model);
+    EXPECT_EQ(model->joint_names(), std::vector<std::string>{"a"});
+    EXPECT_FALSE(make_error(::testing::TempDir() + "/ft_vibration_no_such_file.json").empty());
+    EXPECT_FALSE(make_error(write_config("not_json", "{ this is not json")).empty());
+    // The vehicle index and the sensor name are inputs of the stream derivation: changing either changes the draws.
+    const auto path = one_order("create_names", kJointA);
+    auto base = make(path, 3);
+    sa::ForceTorqueVibrationSetup other;
+    other.config_path = path;
+    other.physics_step_ns = kStepNs;
+    other.vehicle_name = "arm";
+    other.vehicle_index = 2;
+    other.sensor_name = "elbow";
+    other.has_random_seed = true;
+    other.random_seed = 3;
+    std::string error;
+    auto renamed = ms::create_force_torque_vibration(other, error);
+    ASSERT_TRUE(base && renamed) << error;
+    const auto x = values(run(*base, 1000, {2 * kPi}), 0);
+    const auto y = values(run(*renamed, 1000, {2 * kPi}), 0);
+    EXPECT_NE(x, y);
+}
+
+// T-FTV-U2-040 [FTV-150] The order phase is drawn once at creation, uniform on (-pi, pi), joints then orders then axes
+TEST(ForceTorqueVibration, OrderPhaseDrawnOnceUniformInDrawOrder)
+{
+    const double c = 10.0 * 2.0 * kPi * kStepSeconds;  // gear 10, qdot 2*pi rad/s: 10 motor turns per second.
+    const auto path = one_order("phase", kJointA);
+
+    // Drawn once: the phase fitted on the first and on the next 10 periods is the same, with amplitude 1.
+    auto once = make(path, 11);
+    ASSERT_TRUE(once);
+    const auto y = values(run(*once, 2000, {2 * kPi}), 0);
+    const auto p1 = fit_phase(std::vector<double>(y.begin(), y.begin() + 1000), c, 0);
+    const auto p2 = fit_phase(std::vector<double>(y.begin() + 1000, y.end()), c, 1000);
+    EXPECT_NEAR(p1.amplitude, 1.0, 1e-9);
+    EXPECT_NEAR(std::remainder(p1.phase - p2.phase, 2.0 * kPi), 0.0, 1e-9);
+
+    // Uniform over seeds: the mean resultant length of 400 phases stays near 0 (about 0.044 expected; a phase drawn
+    // from a narrower range would give a large value) and each quadrant holds about a quarter.
+    double sx = 0.0, sy = 0.0;
+    int quadrant[4] = {0, 0, 0, 0};
+    for (std::uint64_t seed = 1; seed <= 400; ++seed) {
+        auto m = make(path, seed);
+        ASSERT_TRUE(m);
+        const auto fit = fit_phase(values(run(*m, 1000, {2 * kPi}), 0), c, 0);
+        sx += std::cos(fit.phase);
+        sy += std::sin(fit.phase);
+        ++quadrant[(fit.phase >= 0 ? 0 : 2) + ((std::abs(fit.phase) <= kPi / 2) ? 0 : 1)];
+    }
+    EXPECT_LT(std::hypot(sx, sy) / 400.0, 0.15);
+    for (int q : quadrant) {
+        EXPECT_GT(q, 60);
+        EXPECT_LT(q, 140);
+    }
+
+    // Draw order: components appended after joint a (another order of a, another joint) leave a's draws unchanged;
+    // a joint placed before a takes the first draws, so a's phase changes.
+    const char* kOrder2 = R"({"name":"a","gear_ratio":10,"deadband_hz":0.01,"orders":[{"order":1,"amplitude":{"fx":1}},
+        {"order":3,"amplitude":{"fy":1}}]})";
+    const char* kJointB = R"({"name":"b","gear_ratio":7,"deadband_hz":0.01,"orders":[{"order":2,"amplitude":{"fz":1}}]})";
+    auto alone = make(path, 5);
+    auto appended = make(one_order("phase_appended", std::string(kOrder2) + "," + kJointB), 5);
+    auto prepended = make(one_order("phase_prepended", std::string(kJointB) + "," + kJointA), 5);
+    ASSERT_TRUE(alone && appended && prepended);
+    const auto a = values(run(*alone, 1000, {2 * kPi}), 0);
+    const auto b = values(run(*appended, 1000, {2 * kPi, 0.0}), 0);
+    const auto p = values(run(*prepended, 1000, {0.0, 2 * kPi}), 0);
+    for (std::size_t k = 0; k < a.size(); ++k) EXPECT_DOUBLE_EQ(a[k], b[k]);
+    EXPECT_NE(a, p);
+}
+
+// T-FTV-U1-080 [FTV-170] load_gain {positive, negative, lag_s}: the model then needs joint loads; values are checked
+TEST(ForceTorqueVibration, LoadGainConfiguration)
+{
+    auto with = make(one_order("load_ok",
+        R"({"name":"a","gear_ratio":10,"load_gain":{"positive":1.5,"negative":0.7,"lag_s":0},"orders":[]})"));
+    auto without = make(one_order("load_none", kJointA));
+    ASSERT_TRUE(with && without);
+    EXPECT_TRUE(with->needs_joint_load());
+    EXPECT_FALSE(without->needs_joint_load());
+    sa::Wrench out;
+    std::string error;
+    EXPECT_FALSE(with->step(0, {1.0}, out, error));        // loads unknown: refused (FTV-022)
+    EXPECT_FALSE(error.empty());
+    EXPECT_TRUE(with->step(0, {1.0}, {2.0}, out, error)) << error;
+    const std::vector<std::pair<std::string, std::string>> bad = {
+        {"load_no_negative", R"({"positive":1})"},
+        {"load_no_positive", R"({"negative":1})"},
+        {"load_zero_positive", R"({"positive":0,"negative":1})"},
+        {"load_negative_lag", R"({"positive":1,"negative":1,"lag_s":-0.1})"},
+        {"load_unknown_key", R"({"positive":1,"negative":1,"gain":2})"},
+    };
+    for (const auto& b : bad)
+        EXPECT_FALSE(make_error(one_order(b.first,
+            R"({"name":"a","gear_ratio":10,"load_gain":)" + b.second + R"(,"orders":[]})")).empty()) << b.first;
+}
+
+// T-FTV-U6-030 [FTV-410] [FTV-420] [FTV-430] [FTV-440] Every documented key is accepted; an unknown key is rejected at
+// every level (top, joint, order, mode, broadband)
+TEST(ForceTorqueVibration, ConfigurationKeysAtEveryLevel)
+{
+    const std::string order = R"({"order":2,"exponent":0.8,"resonance":true,"amplitude":{"fxy":0.1,"fz":0.05,"txy":0.01,"tz":0.001}})";
+    const std::string joint = R"({"name":"a","gear_ratio":100,"deadband_hz":20,"run_log_sigma":0.3,"run_group":"gear",
+        "load_gain":{"positive":1.4,"negative":0.9,"lag_s":0.7},"orders":[)" + order + "]}";
+    const std::string mode = R"({"frequency_hz":12,"damping":0.1,"at_rest":{"fz":0.05},"per_activity":{"fz":0.02},
+        "per_motion":{"fx":0.03},"motion_ramp":0.2,"at_rest_while_moving":0.3,"frame":"world","run_log_sigma":0.2,"run_group":"arm"})";
+    const std::string broadband = R"({"exponent":1,"density_per_activity":{"fxy":1e-4},"run_log_sigma":0.1,"run_group":"arm"})";
+    auto full = [&](const std::string& j, const std::string& m, const std::string& b, const std::string& top) {
+        return R"({"type":"force_torque_vibration","f_ref_hz":50,"joints":[)" + j + R"(],"modes":[)" + m +
+               R"(],"broadband":)" + b + top + "}";
+    };
+    auto model = make(write_config("keys_full", full(joint, mode, broadband, "")));
+    ASSERT_TRUE(model);
+    EXPECT_TRUE(model->needs_joint_load());
+    EXPECT_TRUE(model->needs_sensor_orientation());
+
+    auto with_extra = [](std::string object) { return object.insert(1, R"("bogus":1,)"); };
+    const std::string order_extra = R"({"name":"a","gear_ratio":100,"orders":[)" + with_extra(order) + "]}";
+    const std::vector<std::pair<std::string, std::string>> unknown = {
+        {"keys_top", full(joint, mode, broadband, R"(,"bogus":1)")},
+        {"keys_joint", full(with_extra(joint), mode, broadband, "")},
+        {"keys_order", full(order_extra, mode, broadband, "")},
+        {"keys_mode", full(joint, with_extra(mode), broadband, "")},
+        {"keys_broadband", full(joint, mode, with_extra(broadband), "")},
+    };
+    for (const auto& u : unknown) EXPECT_FALSE(make_error(write_config(u.first, u.second)).empty()) << u.first;
+}
+
+// T-FTV-U5-020 [FTV-620] The model's streams are independent of the force-torque adapter's: stepping an adapter of the
+// same seed, vehicle and sensor name in between does not change the vibration sequence
+TEST(ForceTorqueVibration, StreamsIndependentOfForceTorqueAdapter)
+{
+    const auto path = write_config("indep", R"({"type":"force_torque_vibration","joints":[{"name":"a","gear_ratio":10,
+      "orders":[{"order":2,"amplitude":{"fx":1}}]}],"modes":[{"frequency_hz":20,"damping":0.1,"at_rest":{"fz":1},
+      "per_activity":{}}],"broadband":{"density_per_activity":{"fy":0.01}}})");
+    const auto ft_path = write_config("indep_ft", R"({"type":"force_torque","update_rate":1000,
+      "range":{"fxy":100,"fz":100,"txy":10,"tz":10},"noise":{"definition":"1sigma","rate_hz":1000,"fxy":0.1,"fz":0.1,"txy":0.01,"tz":0.01},
+      "bias":{"fxy":0.5,"fz":0.5,"txy":0.05,"tz":0.05}})");
+    auto alone = make(path, 9);
+    auto shared = make(path, 9);
+    sa::ForceTorqueAdapterSetup setup;
+    setup.config_path = ft_path;
+    setup.physics_step_ns = kStepNs;
+    setup.vehicle_name = "arm";
+    setup.vehicle_index = 2;
+    setup.sensor_name = "wrist";
+    setup.has_random_seed = true;
+    setup.random_seed = 9;
+    std::string error;
+    auto adapter = ms::create_force_torque_sensor_adapter(setup, error);
+    ASSERT_TRUE(alone && shared && adapter) << error;
+    const auto a = run(*alone, 500, {2 * kPi});
+    for (std::uint64_t k = 0; k < 500; ++k) {
+        sa::ForceTorqueTruth t;
+        t.sim_time_ns = k * kStepNs;
+        sa::ForceTorqueSample s;
+        ASSERT_TRUE(adapter->step(t, s, error)) << error;
+        sa::Wrench w;
+        ASSERT_TRUE(shared->step(k * kStepNs, {2 * kPi}, w, error)) << error;
+        for (int i = 0; i < 6; ++i) EXPECT_DOUBLE_EQ(axis(a[k], i), axis(w, i)) << "step " << k << " axis " << i;
+    }
 }

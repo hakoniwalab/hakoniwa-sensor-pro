@@ -1,17 +1,17 @@
 {
   "platform": "macos-arm64",
-  "run": "2026-11-20 22:33 UTC",
-  "total": 270,
-  "passed": 270,
+  "run": "2026-11-20 22:43 UTC",
+  "total": 275,
+  "passed": 275,
   "failed": [],
   "ctest_exit": 0,
   "excluded": "",
   "binaries": {
-    "built": "2026-11-20T22:31:38Z",
+    "built": "2026-11-20T22:42:58Z",
     "sources": {
       "sensors-pro": {
         "repository": "hakoniwalab/hakoniwa-mujoco-sensors-pro",
-        "revision": "29dc1e59448aa9e7d80d5aa7a99a35c02b53ab9d"
+        "revision": "cd417069a8b0b74d0d4ad3ea523e50ac076ed471"
       },
       "drone-pro": {
         "repository": "hakoniwalab/hakoniwa-drone-pro",
@@ -29,7 +29,7 @@
       "mujoco_library": "libmujoco.3.16.0.dylib",
       "mujoco_version": "3.16.0"
     },
-    "manifest_sha256": "5664e42f5f2ea97664057773917b4760748907bdcc53a3cfc461be57e6c6567c"
+    "manifest_sha256": "6f35ede2250b44954964815583e55b35e5447644cf9e77c14067fc5c40bd6c2e"
   },
   "by_sensor": {
     "Rangefinder": {
@@ -74,8 +74,8 @@
     },
     "Force-torque": {
       "model": {
-        "total": 65,
-        "passed": 65
+        "total": 70,
+        "passed": 70
       },
       "mujoco": {
         "total": 5,
@@ -197,6 +197,11 @@
     "ForceTorqueVibration.AxisValueOverridesAxisGroup": true,
     "ForceTorqueVibration.JointNamesAreInConfigurationOrder": true,
     "ForceTorqueVibration.HakoniwaHostModelEntryExists": true,
+    "ForceTorqueVibration.CreationFromSetupFieldsAndFileErrors": true,
+    "ForceTorqueVibration.OrderPhaseDrawnOnceUniformInDrawOrder": true,
+    "ForceTorqueVibration.LoadGainConfiguration": true,
+    "ForceTorqueVibration.ConfigurationKeysAtEveryLevel": true,
+    "ForceTorqueVibration.StreamsIndependentOfForceTorqueAdapter": true,
     "ForceTorqueVibrationRun.ZeroSigmaIsTheModelWithoutVariation": true,
     "ForceTorqueVibrationRun.MultiplierIsLogNormalWithTheConfiguredSigma": true,
     "ForceTorqueVibrationRun.GroupSharesOneDrawWithItsOwnSigma": true,

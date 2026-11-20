@@ -5,7 +5,7 @@
       "repository": "hakoniwalab/hakoniwa-mujoco-sensors-pro",
       "visibility": "private",
       "checkout": "../hakoniwa-mujoco-sensors-pro",
-      "revision": "29dc1e59448aa9e7d80d5aa7a99a35c02b53ab9d"
+      "revision": "cd417069a8b0b74d0d4ad3ea523e50ac076ed471"
     },
     "drone-pro": {
       "repository": "hakoniwalab/hakoniwa-drone-pro",
