@@ -79,7 +79,7 @@ The IMU, magnetometer, barometer and GNSS tests use the model classes directly, 
 How to run them: [docs/running-tests.md](docs/running-tests.md). In short, with the release archive extracted beside this repository:
 
 ```bash
-python3 tools/run-tests.py --dist ../hakoniwa-sensor-pro-0.1.0-macos-arm64 --mujoco-root ../mujoco-$(cat MUJOCO_VERSION.txt)
+python3 tools/run-tests.py --dist ../hakoniwa-sensor-pro-0.2.0-macos-arm64 --mujoco-root ../mujoco-$(cat MUJOCO_VERSION.txt)
 ```
 
 ### Test status
