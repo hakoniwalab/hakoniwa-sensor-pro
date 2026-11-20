@@ -113,15 +113,15 @@ Passed / run. Common: the implementation descriptor, the MuJoCo ray caster and i
 
 ### macos-arm64
 
-- Run: 2026-11-15 11:19 UTC — 225 of 225 tests passed
-- Binary set built 2026-11-15T11:18:48Z from implementation `6319a852`, IMU and GNSS models `2732fc53`, interface (hakoniwa-sensor-adapter) `433de4fe`
+- Run: 2026-11-20 22:33 UTC — 270 of 270 tests passed
+- Binary set built 2026-11-20T22:31:38Z from implementation `29dc1e59`, IMU and GNSS models `2732fc53`, interface (hakoniwa-sensor-adapter) `a68186d7`
 - Toolchain: Apple clang version 21.0.0 (clang-2100.4.1.1)
-- Binary set: MANIFEST.json sha256 `229c6d59699b1da04a24ade719c7dc1b240a10aad558741af801fba1dba796cd` (every file checked against it before the run)
+- Binary set: MANIFEST.json sha256 `5664e42f5f2ea97664057773917b4760748907bdcc53a3cfc461be57e6c6567c` (every file checked against it before the run)
 
 | Sensor | Sensor model | On a MuJoCo model | External plugin |
 |---|---|---|---|
 | Joint | 18 / 18 | 2 / 2 | — |
-| Force-torque | 20 / 20 | 5 / 5 | — |
+| Force-torque | 65 / 65 | 5 / 5 | — |
 | IMU | 34 / 34 | — | — |
 | Magnetometer | 7 / 7 | — | — |
 | Barometer | 17 / 17 | — | — |
@@ -149,7 +149,8 @@ Every requirement of the specification, how it is checked, and the result on eac
 | [LiDAR](docs/traceability.md#lidar) | 14 | 14 | 14 | — |
 | [Depth camera](docs/traceability.md#depth-camera) | 8 | 8 | 8 | — |
 | [RGB camera](docs/traceability.md#rgb-camera) | 9 | 9 | 9 | — |
-| [Force-torque sensor](docs/traceability.md#force-torque-sensor) | 33 | 33 | 33 | — |
+| [Force-torque sensor](docs/traceability.md#force-torque-sensor) | 33 | 33 | 31 | — |
+| [Force-torque vibration (host model)](docs/traceability.md#force-torque-vibration-host-model) | 42 | 33 | 0 | no test 9 |
 | [Joint sensor](docs/traceability.md#joint-sensor) | 27 | 27 | 27 | — |
 | [IMU, magnetometer, barometer and GNSS: common](docs/traceability.md#imu-magnetometer-barometer-and-gnss:-common) | 74 | 29 | 29 | retired 1, host requirement 29, checked by each sensor's tests 8, Hakoniwa Lab internal test 6, code review 1 |
 | [Gyroscope](docs/traceability.md#gyroscope) | 25 | 20 | 20 | host requirement 4, code review 1 |

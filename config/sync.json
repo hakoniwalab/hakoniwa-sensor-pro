@@ -63,6 +63,31 @@
     },
     {
       "source": "sensors-pro",
+      "from": "test/test_force_torque_vibration.cpp",
+      "to": "tests/sensors/test/test_force_torque_vibration.cpp"
+    },
+    {
+      "source": "sensors-pro",
+      "from": "test/test_force_torque_vibration_run.cpp",
+      "to": "tests/sensors/test/test_force_torque_vibration_run.cpp"
+    },
+    {
+      "source": "sensors-pro",
+      "from": "test/test_force_torque_vibration_load.cpp",
+      "to": "tests/sensors/test/test_force_torque_vibration_load.cpp"
+    },
+    {
+      "source": "sensors-pro",
+      "from": "test/test_force_torque_vibration_motion.cpp",
+      "to": "tests/sensors/test/test_force_torque_vibration_motion.cpp"
+    },
+    {
+      "source": "sensors-pro",
+      "from": "test/test_force_torque_vibration_world.cpp",
+      "to": "tests/sensors/test/test_force_torque_vibration_world.cpp"
+    },
+    {
+      "source": "sensors-pro",
       "from": "test/test_joint_sensor.cpp",
       "to": "tests/sensors/test/test_joint_sensor.cpp"
     },

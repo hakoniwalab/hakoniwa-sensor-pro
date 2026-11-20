@@ -1,16 +1,17 @@
 {
   "platform": "macos-arm64",
-  "run": "2026-11-15 11:19 UTC",
-  "total": 225,
-  "passed": 225,
+  "run": "2026-11-20 22:33 UTC",
+  "total": 270,
+  "passed": 270,
   "failed": [],
   "ctest_exit": 0,
+  "excluded": "",
   "binaries": {
-    "built": "2026-11-15T11:18:48Z",
+    "built": "2026-11-20T22:31:38Z",
     "sources": {
       "sensors-pro": {
         "repository": "hakoniwalab/hakoniwa-mujoco-sensors-pro",
-        "revision": "6319a85204edcf57b37d8dcfcf1f9f31016a4378"
+        "revision": "29dc1e59448aa9e7d80d5aa7a99a35c02b53ab9d"
       },
       "drone-pro": {
         "repository": "hakoniwalab/hakoniwa-drone-pro",
@@ -18,7 +19,7 @@
       },
       "sensor-adapter": {
         "repository": "hakoniwalab/hakoniwa-sensor-adapter",
-        "revision": "433de4feda852317f1f1a0d6ea47d3e0b0af7ce4"
+        "revision": "a68186d7aa3d208e20d95bbc766dd09a8754ae90"
       }
     },
     "toolchain": {
@@ -28,7 +29,7 @@
       "mujoco_library": "libmujoco.3.16.0.dylib",
       "mujoco_version": "3.16.0"
     },
-    "manifest_sha256": "229c6d59699b1da04a24ade719c7dc1b240a10aad558741af801fba1dba796cd"
+    "manifest_sha256": "5664e42f5f2ea97664057773917b4760748907bdcc53a3cfc461be57e6c6567c"
   },
   "by_sensor": {
     "Rangefinder": {
@@ -73,8 +74,8 @@
     },
     "Force-torque": {
       "model": {
-        "total": 20,
-        "passed": 20
+        "total": 65,
+        "passed": 65
       },
       "mujoco": {
         "total": 5,
@@ -181,6 +182,51 @@
     "ForceTorque.SeedsStreamsAndReset": true,
     "ForceTorque.ConfigErrors": true,
     "ForceTorque.CapabilitiesAndLog": true,
+    "ForceTorque.PerAxisKeys": true,
+    "ForceTorqueVibration.EmptyModelIsExactlyZero": true,
+    "ForceTorqueVibration.InvalidVelocityIsAnErrorWithoutSideEffects": true,
+    "ForceTorqueVibration.WrongTimeIsAnErrorWithoutSideEffects": true,
+    "ForceTorqueVibration.OrderTracksMotorSpeedAndAmplitudeLaw": true,
+    "ForceTorqueVibration.OrderPhaseIsContinuousAcrossVelocityStep": true,
+    "ForceTorqueVibration.StructuralModeStatisticsAndActivity": true,
+    "ForceTorqueVibration.BroadbandDensityAndZeroActivity": true,
+    "ForceTorqueVibration.OptionalResonanceGain": true,
+    "ForceTorqueVibration.ResetReproducesSequenceFromCreation": true,
+    "ForceTorqueVibration.SeedsAndComponentStreamsAreIndependent": true,
+    "ForceTorqueVibration.ConfigurationErrorsAreRejected": true,
+    "ForceTorqueVibration.AxisValueOverridesAxisGroup": true,
+    "ForceTorqueVibration.JointNamesAreInConfigurationOrder": true,
+    "ForceTorqueVibration.HakoniwaHostModelEntryExists": true,
+    "ForceTorqueVibrationRun.ZeroSigmaIsTheModelWithoutVariation": true,
+    "ForceTorqueVibrationRun.MultiplierIsLogNormalWithTheConfiguredSigma": true,
+    "ForceTorqueVibrationRun.GroupSharesOneDrawWithItsOwnSigma": true,
+    "ForceTorqueVibrationRun.UngroupedComponentsDrawSeparately": true,
+    "ForceTorqueVibrationRun.ChangingOneSigmaKeepsTheOtherMultiplier": true,
+    "ForceTorqueVibrationRun.LevelAtRestIsNotScaled": true,
+    "ForceTorqueVibrationRun.BroadbandAndModeGrowthAreScaled": true,
+    "ForceTorqueVibrationRun.ResetDrawsTheSameMultipliers": true,
+    "ForceTorqueVibrationRun.ConfigurationErrors": true,
+    "ForceTorqueVibrationLoad.WithoutLoadGainLoadsAreIgnored": true,
+    "ForceTorqueVibrationLoad.LoadGainNeedsLoads": true,
+    "ForceTorqueVibrationLoad.GainFollowsTheSignOfPowerWithoutLag": true,
+    "ForceTorqueVibrationLoad.ZeroPowerKeepsTheDirectionAndGainStartsAtOne": true,
+    "ForceTorqueVibrationLoad.FirstOrderLag": true,
+    "ForceTorqueVibrationLoad.ResetReturnsTheGainToOne": true,
+    "ForceTorqueVibrationLoad.ConfigurationErrors": true,
+    "ForceTorqueVibrationLoad.DescriptorVersion": true,
+    "ForceTorqueVibrationMotion.LevelDoesNotDependOnSpeed": true,
+    "ForceTorqueVibrationMotion.RampFromRest": true,
+    "ForceTorqueVibrationMotion.AddsToAtRestAndPerActivity": true,
+    "ForceTorqueVibrationMotion.ConfigWithoutPerMotionIsUnchanged": true,
+    "ForceTorqueVibrationMotion.RunMultiplierScalesTheLevelWhileMoving": true,
+    "ForceTorqueVibrationMotion.ConfigurationErrors": true,
+    "ForceTorqueVibrationWorld.AtRestShareWhileMoving": true,
+    "ForceTorqueVibrationWorld.DefaultShareKeepsTheOutput": true,
+    "ForceTorqueVibrationWorld.WorldModeFollowsTheOrientation": true,
+    "ForceTorqueVibrationWorld.WorldModeSplitsWithTheAngle": true,
+    "ForceTorqueVibrationWorld.SensorModeIgnoresTheOrientation": true,
+    "ForceTorqueVibrationWorld.OrientationIsRequiredAndChecked": true,
+    "ForceTorqueVibrationWorld.ConfigurationErrors": true,
     "JointSensor.IdealPassesTruth": true,
     "JointSensor.JointSideCounts": true,
     "JointSensor.MotorSideResolution": true,

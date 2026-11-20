@@ -33,6 +33,9 @@ STAGES = [("model", "Sensor model"), ("mujoco", "On a MuJoCo model"),
 # Test suite (or ctest name) -> (sensors, stage).
 SUITE = {
     "JointSensor": ("Joint", "model"), "ForceTorque": ("Force-torque", "model"),
+    "ForceTorqueVibration": ("Force-torque", "model"), "ForceTorqueVibrationLoad": ("Force-torque", "model"),
+    "ForceTorqueVibrationMotion": ("Force-torque", "model"), "ForceTorqueVibrationRun": ("Force-torque", "model"),
+    "ForceTorqueVibrationWorld": ("Force-torque", "model"),
     "Lidar": ("2D/3D LiDAR", "model"), "Rangefinder": ("Rangefinder", "model"),
     "DepthCamera": ("Depth camera", "model"), "RgbCamera": ("RGB camera", "model"),
     "Common": ("Common", "model"), "ImplementationDescriptor": ("Common", "model"),
