@@ -53,7 +53,7 @@ The libraries are C++17. A host also needs, for the MuJoCo parts, the MuJoCo ver
 
 Built with the MuJoCo version in [MUJOCO_VERSION.txt](MUJOCO_VERSION.txt) (the implementation's own, synchronised with the tests). The MuJoCo parts (`libhakoniwa_mujoco_sensors_mujoco.a`, `libhakoniwa_mujoco_sensors_renderer.a`, the plugin) must be used with that version; the other libraries do not use MuJoCo. Each archive's `MANIFEST.json` names the MuJoCo library it was built with.
 
-The plugin carries no library search path: a host that loads it supplies the Hakoniwa core libraries (`libassets`), MuJoCo and GLFW. A host links the libraries and registers the implementation through the interface's implementation entry (`hakoniwa-sensor-adapter`'s `sensor_adapter_implementation.hpp`). For hakoniwa-robot-runtime, see its sensor documentation.
+The plugin carries no library search path: a host that loads it supplies the Hakoniwa core libraries (`libassets`), MuJoCo and GLFW. What the plugin needs at load time is recorded in each archive's `MANIFEST.json` under `runtime_dependencies`, read from the binary itself: the shared libraries it names and the Hakoniwa core functions it imports (a core that has all of them is needed; for example `hako_asset_simulation_state` is missing from older cores). PDU output and services call the core only when the host passes `pdu_config_path` or `service_config_dir`; without them no core function is called, but `libassets` must still be found to load the plugin. The static libraries in `lib/` need no Hakoniwa core. A host links the libraries and registers the implementation through the interface's implementation entry (`hakoniwa-sensor-adapter`'s `sensor_adapter_implementation.hpp`). For hakoniwa-robot-runtime, see its sensor documentation.
 
 ## License
 
@@ -79,7 +79,7 @@ The IMU, magnetometer, barometer and GNSS tests use the model classes directly, 
 How to run them: [docs/running-tests.md](docs/running-tests.md). In short, with the release archive extracted beside this repository:
 
 ```bash
-python3 tools/run-tests.py --dist ../hakoniwa-sensor-pro-0.1.0-macos-arm64 --mujoco-root ../mujoco-$(cat MUJOCO_VERSION.txt)
+python3 tools/run-tests.py --dist ../hakoniwa-sensor-pro-0.2.0-macos-arm64 --mujoco-root ../mujoco-$(cat MUJOCO_VERSION.txt)
 ```
 
 ### Test status
@@ -90,15 +90,15 @@ The result of the last run on each platform, by sensor and stage (written by `to
 
 ### linux-x64
 
-- Run: 2026-11-15 11:27 UTC — 225 of 225 tests passed
-- Binary set built 2026-11-15T11:20:33Z from implementation `6319a852`, IMU and GNSS models `2732fc53`, interface (hakoniwa-sensor-adapter) `433de4fe`
+- Run: 2026-11-20 23:31 UTC — 275 of 275 tests passed
+- Binary set built 2026-11-20T23:17:35Z from implementation `cd417069`, IMU and GNSS models `2732fc53`, interface (hakoniwa-sensor-adapter) `a68186d7`
 - Toolchain: c++ (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0
-- Binary set: MANIFEST.json sha256 `937a8250d44832430dc494436b362d965d96fb5c05a3a98d5c16696e97ec7726` (every file checked against it before the run)
+- Binary set: MANIFEST.json sha256 `99454654cf96b727074359bc3bb18c2ed0ed6318b81ba9ef4c9ebf598fdd5cb0` (every file checked against it before the run)
 
 | Sensor | Sensor model | On a MuJoCo model | External plugin |
 |---|---|---|---|
 | Joint | 18 / 18 | 2 / 2 | — |
-| Force-torque | 20 / 20 | 5 / 5 | — |
+| Force-torque | 70 / 70 | 5 / 5 | — |
 | IMU | 34 / 34 | — | — |
 | Magnetometer | 7 / 7 | — | — |
 | Barometer | 17 / 17 | — | — |
@@ -113,15 +113,15 @@ Passed / run. Common: the implementation descriptor, the MuJoCo ray caster and i
 
 ### macos-arm64
 
-- Run: 2026-11-15 11:19 UTC — 225 of 225 tests passed
-- Binary set built 2026-11-15T11:18:48Z from implementation `6319a852`, IMU and GNSS models `2732fc53`, interface (hakoniwa-sensor-adapter) `433de4fe`
+- Run: 2026-11-20 23:12 UTC — 275 of 275 tests passed
+- Binary set built 2026-11-20T23:12:08Z from implementation `cd417069`, IMU and GNSS models `2732fc53`, interface (hakoniwa-sensor-adapter) `a68186d7`
 - Toolchain: Apple clang version 21.0.0 (clang-2100.4.1.1)
-- Binary set: MANIFEST.json sha256 `229c6d59699b1da04a24ade719c7dc1b240a10aad558741af801fba1dba796cd` (every file checked against it before the run)
+- Binary set: MANIFEST.json sha256 `a91aa42c0e97ee94e25bf4099ebec46e46e1c1abe858db9230e4a73c1818315e` (every file checked against it before the run)
 
 | Sensor | Sensor model | On a MuJoCo model | External plugin |
 |---|---|---|---|
 | Joint | 18 / 18 | 2 / 2 | — |
-| Force-torque | 20 / 20 | 5 / 5 | — |
+| Force-torque | 70 / 70 | 5 / 5 | — |
 | IMU | 34 / 34 | — | — |
 | Magnetometer | 7 / 7 | — | — |
 | Barometer | 17 / 17 | — | — |
@@ -150,6 +150,7 @@ Every requirement of the specification, how it is checked, and the result on eac
 | [Depth camera](docs/traceability.md#depth-camera) | 8 | 8 | 8 | — |
 | [RGB camera](docs/traceability.md#rgb-camera) | 9 | 9 | 9 | — |
 | [Force-torque sensor](docs/traceability.md#force-torque-sensor) | 33 | 33 | 33 | — |
+| [Force-torque vibration (host model)](docs/traceability.md#force-torque-vibration-host-model) | 42 | 42 | 42 | — |
 | [Joint sensor](docs/traceability.md#joint-sensor) | 27 | 27 | 27 | — |
 | [IMU, magnetometer, barometer and GNSS: common](docs/traceability.md#imu-magnetometer-barometer-and-gnss:-common) | 74 | 29 | 29 | retired 1, host requirement 29, checked by each sensor's tests 8, Hakoniwa Lab internal test 6, code review 1 |
 | [Gyroscope](docs/traceability.md#gyroscope) | 25 | 20 | 20 | host requirement 4, code review 1 |

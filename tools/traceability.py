@@ -24,7 +24,8 @@ BEGIN, END = "<!-- traceability:begin -->", "<!-- traceability:end -->"
 SPECS = [("README.md", "Common (rangefinder, LiDAR, depth and RGB cameras)"),
          ("rangefinder.md", "Rangefinder"), ("lidar.md", "LiDAR"),
          ("depth-camera.md", "Depth camera"), ("rgb-camera.md", "RGB camera"),
-         ("force-torque.md", "Force-torque sensor"), ("joint.md", "Joint sensor"),
+         ("force-torque.md", "Force-torque sensor"),
+         ("force-torque-vibration.md", "Force-torque vibration (host model)"), ("joint.md", "Joint sensor"),
          ("drone-common.md", "IMU, magnetometer, barometer and GNSS: common"), ("gyro.md", "Gyroscope"),
          ("accelerometer.md", "Accelerometer"), ("magnetometer.md", "Magnetometer"),
          ("barometer.md", "Barometer"), ("gps.md", "GPS")]
@@ -33,7 +34,7 @@ TEST_DESIGNS = ["test-design.md", "gyro/test-design.md", "acceleration/test-desi
                 "geomagnet/test-design.md", "barometric/test-design.md", "gps/test-design.md"]
 DESIGN_PATH = "docs/architecture/aircraft/sensor/"
 SPEC_URL = "https://github.com/hakoniwalab/hakoniwa-sensor-adapter/blob/{rev}/docs/spec/{file}"
-REQ = re.compile(r"\b((?:RIS|FTS|JNT|SEN)-[A-Z]{3}-\d{3})(?:\.\.(\d{3}))?")
+REQ = re.compile(r"\b((?:RIS|FTS|JNT|SEN)-[A-Z]{3}-\d{3}|FTV-\d{3})(?:\.\.(\d{3}))?")
 STATUS = {"internal": "Hakoniwa Lab internal test (publication in preparation)",
           "per-sensor": "Checked by each sensor's tests", "retired": "Retired",
           "unnamed": "Test design names a check without a test ID", "host": "Host requirement (not the adapter's)", "elsewhere": "Implementation test not in this repository",
@@ -57,7 +58,7 @@ def requirements():
         text = subprocess.run(["git", "-C", str(checkout), "show", f"{rev}:docs/spec/{file}"],
                               check=True, capture_output=True, text=True).stdout
         for line in text.splitlines():
-            m = re.match(r"^\|\s*((?:RIS|FTS|JNT|SEN)-[A-Z]{3}-\d{3})\s*\|(.*)\|\s*$", line)
+            m = re.match(r"^\|\s*((?:RIS|FTS|JNT|SEN)-[A-Z]{3}-\d{3}|FTV-\d{3})\s*\|(.*)\|\s*$", line)
             if not m or m.group(1) in seen:
                 continue
             cells = [c.strip() for c in m.group(2).split("|")]

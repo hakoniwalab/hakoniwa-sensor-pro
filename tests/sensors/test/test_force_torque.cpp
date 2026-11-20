@@ -399,3 +399,47 @@ TEST(ForceTorque, CapabilitiesAndLog)
     full->log_values(values);
     EXPECT_EQ(values.size(), 18u);
 }
+
+// T-FTS-U3-030 [FTS-ADP-520] [FTS-ADP-540] Per-axis keys: an axis key takes precedence over its group;
+// a configuration with groups only reads as before; range and overload need every axis
+TEST(ForceTorque, PerAxisKeys)
+{
+    // Noise: fx overrides fxy, fy keeps the group; tx and ty both by axis.
+    const std::string noise = "\"noise\":{\"definition\":\"1sigma\",\"rate_hz\":500,\"fxy\":0.1,\"fx\":0.3,"
+                              "\"fz\":0.2,\"tx\":0.01,\"ty\":0.04,\"tz\":0.02}";
+    auto a = make(config("axis_noise", noise));
+    const auto s = run(*a, 40000, [](std::uint64_t) { return wrench({0, 0, 0, 0, 0, 0}); });
+    std::vector<double> v[6];
+    for (const auto& x : s)
+        if (x.updated)
+            for (int i = 0; i < 6; ++i) v[i].push_back(axis(x.wrench, i));
+    const double expected[6] = {0.3, 0.1, 0.2, 0.01, 0.04, 0.02};
+    for (int i = 0; i < 6; ++i) EXPECT_NEAR(stddev(v[i]), expected[i], 0.03 * expected[i]) << i;
+
+    // Groups only and the same values by axis give the same sequence (the same seed).
+    auto g = make(config("axis_group", "\"bias\":{\"fxy\":0.5,\"fz\":0.5,\"txy\":0.05,\"tz\":0.05}"));
+    auto p = make(config("axis_split", "\"bias\":{\"fx\":0.5,\"fy\":0.5,\"fz\":0.5,\"tx\":0.05,\"ty\":0.05,\"tz\":0.05}"));
+    const auto sg = run(*g, 4, [](std::uint64_t) { return wrench({0, 0, 0, 0, 0, 0}); });
+    const auto sp = run(*p, 4, [](std::uint64_t) { return wrench({0, 0, 0, 0, 0, 0}); });
+    for (int i = 0; i < 6; ++i) EXPECT_EQ(axis(sg[0].wrench, i), axis(sp[0].wrench, i)) << i;
+
+    // Range by axis: Fx clips at 50 N, Fy (group 100 N) does not at 80 N.
+    auto r = make(write_config("axis_range", "{\"type\":\"force_torque\",\"update_rate\":500,"
+                                             "\"range\":{\"fxy\":100,\"fx\":50,\"fz\":200,\"txy\":5,\"tz\":10}}"));
+    const auto sr = run(*r, 1, [](std::uint64_t) { return wrench({80, 80, 0, 0, 0, 0}); });
+    EXPECT_DOUBLE_EQ(sr[0].wrench.force.x, 50.0);
+    EXPECT_DOUBLE_EQ(sr[0].wrench.force.y, 80.0);
+
+    // Errors: a pair half given, an unknown axis key, a % range.
+    EXPECT_NE(make_error(write_config("axis_half", "{\"type\":\"force_torque\",\"update_rate\":500,"
+                                                   "\"range\":{\"fx\":50,\"fz\":200,\"txy\":5,\"tz\":10}}"))
+                  .find("range.fy"),
+              std::string::npos);
+    EXPECT_NE(make_error(config("axis_unknown", "\"bias\":{\"fq\":1}")).find("unknown key"), std::string::npos);
+    EXPECT_FALSE(make_error(write_config("axis_pct", "{\"type\":\"force_torque\",\"update_rate\":500,"
+                                                    "\"range\":{\"fxy\":\"50%\",\"fz\":200,\"txy\":5,\"tz\":10}}"))
+                     .empty());
+    EXPECT_NE(make_error(config("axis_overload", "\"overload\":{\"fx\":\"150%\",\"fz\":300,\"txy\":10,\"tz\":20}"))
+                  .find("overload.fy"),
+              std::string::npos);
+}

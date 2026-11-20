@@ -5,7 +5,7 @@
       "repository": "hakoniwalab/hakoniwa-mujoco-sensors-pro",
       "visibility": "private",
       "checkout": "../hakoniwa-mujoco-sensors-pro",
-      "revision": "6319a85204edcf57b37d8dcfcf1f9f31016a4378"
+      "revision": "cd417069a8b0b74d0d4ad3ea523e50ac076ed471"
     },
     "drone-pro": {
       "repository": "hakoniwalab/hakoniwa-drone-pro",
@@ -17,8 +17,8 @@
       "repository": "hakoniwalab/hakoniwa-sensor-adapter",
       "visibility": "public",
       "checkout": "../hakoniwa-sensor-adapter",
-      "revision": "433de4feda852317f1f1a0d6ea47d3e0b0af7ce4",
-      "specification_revision": "0b739187af1a6504af5aa7dc3e567d0167836d8a"
+      "revision": "a68186d7aa3d208e20d95bbc766dd09a8754ae90",
+      "specification_revision": "a68186d7aa3d208e20d95bbc766dd09a8754ae90"
     },
     "drone-core": {
       "repository": "toppers/hakoniwa-drone-core",

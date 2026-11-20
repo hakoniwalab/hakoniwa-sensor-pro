@@ -80,7 +80,9 @@ add_test(NAME no_build_paths
 
 # --- The sensor models behind the public interface ---
 foreach(name test_rangefinder test_lidar test_depth_camera test_rgb_camera
-             test_force_torque test_joint_sensor test_implementation_descriptor)
+             test_force_torque test_force_torque_vibration test_force_torque_vibration_run
+             test_force_torque_vibration_load test_force_torque_vibration_motion test_force_torque_vibration_world
+             test_joint_sensor test_implementation_descriptor)
     sensor_gtest(${name} hakoniwa_mujoco_sensors_adapters)
 endforeach()
 foreach(name test_force_torque_spec test_joint_spec)
