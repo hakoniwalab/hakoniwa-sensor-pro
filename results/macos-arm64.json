@@ -1,13 +1,13 @@
 {
   "platform": "macos-arm64",
-  "run": "2026-11-20 22:43 UTC",
+  "run": "2026-11-20 23:12 UTC",
   "total": 275,
   "passed": 275,
   "failed": [],
   "ctest_exit": 0,
   "excluded": "",
   "binaries": {
-    "built": "2026-11-20T22:42:58Z",
+    "built": "2026-11-20T23:12:08Z",
     "sources": {
       "sensors-pro": {
         "repository": "hakoniwalab/hakoniwa-mujoco-sensors-pro",
@@ -29,7 +29,7 @@
       "mujoco_library": "libmujoco.3.16.0.dylib",
       "mujoco_version": "3.16.0"
     },
-    "manifest_sha256": "6f35ede2250b44954964815583e55b35e5447644cf9e77c14067fc5c40bd6c2e"
+    "manifest_sha256": "a91aa42c0e97ee94e25bf4099ebec46e46e1c1abe858db9230e4a73c1818315e"
   },
   "by_sensor": {
     "Rangefinder": {

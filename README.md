@@ -53,7 +53,7 @@ The libraries are C++17. A host also needs, for the MuJoCo parts, the MuJoCo ver
 
 Built with the MuJoCo version in [MUJOCO_VERSION.txt](MUJOCO_VERSION.txt) (the implementation's own, synchronised with the tests). The MuJoCo parts (`libhakoniwa_mujoco_sensors_mujoco.a`, `libhakoniwa_mujoco_sensors_renderer.a`, the plugin) must be used with that version; the other libraries do not use MuJoCo. Each archive's `MANIFEST.json` names the MuJoCo library it was built with.
 
-The plugin carries no library search path: a host that loads it supplies the Hakoniwa core libraries (`libassets`), MuJoCo and GLFW. A host links the libraries and registers the implementation through the interface's implementation entry (`hakoniwa-sensor-adapter`'s `sensor_adapter_implementation.hpp`). For hakoniwa-robot-runtime, see its sensor documentation.
+The plugin carries no library search path: a host that loads it supplies the Hakoniwa core libraries (`libassets`), MuJoCo and GLFW. What the plugin needs at load time is recorded in each archive's `MANIFEST.json` under `runtime_dependencies`, read from the binary itself: the shared libraries it names and the Hakoniwa core functions it imports (a core that has all of them is needed; for example `hako_asset_simulation_state` is missing from older cores). PDU output and services call the core only when the host passes `pdu_config_path` or `service_config_dir`; without them no core function is called, but `libassets` must still be found to load the plugin. The static libraries in `lib/` need no Hakoniwa core. A host links the libraries and registers the implementation through the interface's implementation entry (`hakoniwa-sensor-adapter`'s `sensor_adapter_implementation.hpp`). For hakoniwa-robot-runtime, see its sensor documentation.
 
 ## License
 
@@ -113,10 +113,10 @@ Passed / run. Common: the implementation descriptor, the MuJoCo ray caster and i
 
 ### macos-arm64
 
-- Run: 2026-11-20 22:43 UTC — 275 of 275 tests passed
-- Binary set built 2026-11-20T22:42:58Z from implementation `cd417069`, IMU and GNSS models `2732fc53`, interface (hakoniwa-sensor-adapter) `a68186d7`
+- Run: 2026-11-20 23:12 UTC — 275 of 275 tests passed
+- Binary set built 2026-11-20T23:12:08Z from implementation `cd417069`, IMU and GNSS models `2732fc53`, interface (hakoniwa-sensor-adapter) `a68186d7`
 - Toolchain: Apple clang version 21.0.0 (clang-2100.4.1.1)
-- Binary set: MANIFEST.json sha256 `6f35ede2250b44954964815583e55b35e5447644cf9e77c14067fc5c40bd6c2e` (every file checked against it before the run)
+- Binary set: MANIFEST.json sha256 `a91aa42c0e97ee94e25bf4099ebec46e46e1c1abe858db9230e4a73c1818315e` (every file checked against it before the run)
 
 | Sensor | Sensor model | On a MuJoCo model | External plugin |
 |---|---|---|---|

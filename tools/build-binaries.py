@@ -79,6 +79,32 @@ def sha256(path):
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
+def plugin_dependencies(plugin):
+    """What the plugin needs at load time, read from the binary: the shared libraries it names and the Hakoniwa
+    core functions it imports. PDU and services call the core only when the host passes pdu_config_path or
+    service_config_dir; the library must still be found to load the plugin."""
+    if sys.platform == "darwin":
+        lines = subprocess.run(["otool", "-L", str(plugin)], capture_output=True, text=True, check=True).stdout.splitlines()[1:]
+        needed = [line.strip().split(" (")[0] for line in lines if line.strip()]
+    else:
+        out = subprocess.run(["readelf", "-d", str(plugin)], capture_output=True, text=True, check=True).stdout
+        needed = [line.split("[", 1)[1].rstrip("]") for line in out.splitlines() if "(NEEDED)" in line]
+    undefined = subprocess.run(["nm", "-u", str(plugin)], capture_output=True, text=True, check=True).stdout.split()
+    hako = sorted({u.lstrip("_").split("@")[0] for u in undefined if u.lstrip("_").startswith("hako_")})
+    return {
+        "shared_libraries": needed,
+        "hakoniwa_core_functions": hako,
+        "notes": [
+            "Loading the plugin needs the Hakoniwa core library (libassets) whose functions are listed here, "
+            "MuJoCo of toolchain.mujoco_version, GLFW 3.3 or later and OpenGL; the plugin carries no search path, "
+            "the host supplies the library directories.",
+            "PDU output and services call the Hakoniwa core only when the host passes pdu_config_path or "
+            "service_config_dir; without them no core function is called.",
+            "The static libraries in lib/ need no Hakoniwa core; the MuJoCo parts need MuJoCo.",
+        ],
+    }
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--hakoniwa-prefix", required=True, help="Hakoniwa (core) install prefix, for the plugin")
@@ -148,6 +174,8 @@ def main():
         "sources": {n: {"repository": s["repository"], "revision": s["revision"]} for n, s in sources.items()},
         "toolchain": {"cmake": cmake_version, "compiler": compiler, "build_type": "Release",
                       "mujoco_library": mujoco_lib.name, "mujoco_version": mujoco_version},
+        "runtime_dependencies": {"lib/hakoniwa_mujoco_sensors_plugin.so":
+                                 plugin_dependencies(dist / "lib" / "hakoniwa_mujoco_sensors_plugin.so")},
         "files": {str(p.relative_to(dist)): sha256(p) for p in files},
     }
     (dist / "MANIFEST.json").write_text(json.dumps(manifest, indent=2) + "\n")
